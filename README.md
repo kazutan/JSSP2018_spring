@@ -20,14 +20,14 @@
 R/RStudioはフリーソフトウェアです。
 
 + Rの最新バージョンをインストールしておいてください。
-	+ The Comprehensive R Archive Network(https://cran.r-project.org)より自分の環境(Window/Mac/Linux)にあったRインストーラをダウンロードし，実行します。
+	+ (The Comprehensive R Archive Network)[https://cran.r-project.org]より自分の環境(Window/Mac/Linux)にあったRインストーラをダウンロードし，実行します。
 	+ Rの最新バージョンは3.4.3です。(2018/2/3現在)
 	+ Windowsマシンの場合
 		+ インストールの際は，R for Windowsのリンクより，baseを選択し,Download R 3.4.3 for Windowsを選択して下さい。
 		+ ユーザ名に2バイト文字が含まれていると不具合を起こすことがあります。その場合はお手数ですが，半角英数文字だけのアカウントを作成してください。
 		+ インストールに際しては管理者権限を持っているアカウントで実行してください。
 + RStudioの最新バージョンをインストールしておいてください。
-	+ RStudioのサイト(https://www.rstudio.com)より，Download RStudio Desktopを選択，インストーラを入手して実行してください。
+	+ (RStudioのサイト)[https://www.rstudio.com]より，Download RStudio Desktopを選択，インストーラを入手して実行してください。
 	+ Free Editionで構いません。
 	+ RStudioの最新バージョンは1.1.419です。(2018/2/3現在)
 	
@@ -49,8 +49,8 @@ R/RStudioはフリーソフトウェアです。
 
 ### Part II データの可視化
 
-+ 文法に則ったデータの可視化
-+ 分析データの可視化
-	+ 回帰分析を例に
++ 文法に則ったデータの可視化*
++ 分析データの可視化*
+	+ 回帰分析を例に*
 
 ### 質疑応答
