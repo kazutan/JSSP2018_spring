@@ -9,16 +9,17 @@ navbar:
       href: intro_rstudio.html
     - text: "データ操作"
       href: data_handling.html
-#    - text: "ggplot2入門"
-#      href: ggplot2_html
+    - text: "ggplot2入門"
+      href: "#"
   right:
     - icon: fa-github
       href: https://github.com/kazutan/JSSP2018_spring
 output:
   html_document:
-    theme: cosmo
+    theme: yeti
     highlight: textmate
-#    include:
-#      after_body: footer.html
+    md_extensions: -ascii_identifiers
+    include:
+      after_body: footer.html
     css: styles.css
 output_dir: "docs"

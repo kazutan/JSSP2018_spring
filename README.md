@@ -1,3 +1,7 @@
+このリポジトリは[日本社会心理学会 第5回春の方法論セミナー 「RとRSutdio入門」](http://www.socialpsychology.jp/seminar/seminar2.html)にて公開しているリポジトリです。
+
+Webページにつきましては、[こちらのリンク先](https://kazutan.github.io/JSSP2018_spring)をご参照ください。
+
 # JSSP2018_spring
 日本社会心理学会 第５回 春の方法論セミナー のセミナー2　「RとRStudio入門(仮)」用のリポジトリ。
 

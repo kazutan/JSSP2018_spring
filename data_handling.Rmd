@@ -6,3 +6,9 @@ title: "データ操作"
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+[WIP]
+
+```{r, child="_session_info.Rmd"}
+
+```
+
