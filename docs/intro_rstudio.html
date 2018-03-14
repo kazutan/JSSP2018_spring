@@ -11,7 +11,7 @@
 
 
 
-<title>RStudio入門</title>
+<title>R/RStudio入門</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -19,6 +19,9 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -167,6 +170,101 @@ $(document).ready(function () {
 
 
 
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
 
 
 <div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
@@ -207,12 +305,270 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">RStudio入門</h1>
+<h1 class="title toc-ignore">R/RStudio入門</h1>
 
 </div>
 
 
+<p><strong>注意: こちらはまだ暫定版です。当日(2018/03/21)までに変更の可能性があります。ご了承ください。</strong></p>
+<div id="rとrstudioに触れてみよう" class="section level1">
+<h1>RとRStudioに触れてみよう</h1>
+<div id="rrstudioの起動と画面" class="section level2">
+<h2>R(RStudio)の起動と画面</h2>
+<p>RStudioを早速起動させましょう。RStudioは主に4つの部分(pane)に分かれています:</p>
+<div class="figure">
+<img src="pics/rstudio_screen.png" />
+
+</div>
+<div id="左下-console" class="section level3">
+<h3>左下: Console</h3>
+<div class="figure">
+<img src="pics/rstudio_screen_2.png" />
+
+</div>
+<p>Rを対話的に操作するところです。コマンドを記述して実行します。Rに対して「これをやれ」と指示を出し、その結果もまたここに出てきます。</p>
+</div>
+<div id="左上-source-editor" class="section level3">
+<h3>左上: Source Editor</h3>
+<div class="figure">
+<img src="pics/rstudio_screen_1.png" />
+
+</div>
+<p>Rのスクリプトやファイルなどを編集する場所です。ここで各種ファイルを開き、コードを編集して保存したり、そのコードを実行します。ここでコードを実行すると、その内容がConsoleへ順次送られて実行されます。</p>
+<p>通常、ここでRスクリプトファイル(*.R)を作成して、それを実行して作業をしていきます。よって、おそらくは多くの場合ここが一番利用するところとなるでしょう。</p>
+</div>
+<div id="右下-file-plots-packages-helpなど" class="section level3">
+<h3>右下: File, Plots, Packages, Helpなど</h3>
+<div class="figure">
+<img src="pics/rstudio_screen_4.png" />
+
+</div>
+<div id="file" class="section level4">
+<h4>File</h4>
+<p>ディレクトリ(フォルダ)にアクセスします。各ファイルをクリックするとその場で開くことができます。また名前の変更やディレクトリ作成などもできます。</p>
+</div>
+<div id="plots" class="section level4">
+<h4>Plots</h4>
+<p>グラフなどを出力すると、ここに表示されます。ある程度遡れますし、ここから画像などにエクスポートすることもできます。</p>
+</div>
+<div id="packages" class="section level4">
+<h4>Packages</h4>
+<p>Rの拡張パッケージを管理できます。<strong>Rはパッケージがポイント</strong>になるので、頻繁に利用します。「パッケージとは何か」については後述します。</p>
+</div>
+<div id="help" class="section level4">
+<h4>Help</h4>
+<p>ヘルプウィンドウで、Rの関数などを検索したり、その組み込みのヘルプを閲覧することができます。ただあまりここから検索することは少なく、Consoleで <code>?help</code> というようにしてヘルプを表示させるのがメインです</p>
+</div>
+</div>
+<div id="右上-environment-historyなど" class="section level3">
+<h3>右上: Environment, Historyなど</h3>
+<div class="figure">
+<img src="pics/rstudio_screen_3.png" />
+
+</div>
+<div id="environment" class="section level4">
+<h4>Environment</h4>
+<p>Rの<strong>環境</strong>を表示します。とりあえずは「今Rで読み込んだり作ったりしてるデータや変数といったものが見れる」と考えておいてください。</p>
+</div>
+<div id="history" class="section level4">
+<h4>History</h4>
+<p>Consoleで実行した内容の履歴です。ここから再度Consoleに送ったり、Scriptに送ったりすることもできます。</p>
+</div>
+</div>
+</div>
+</div>
+<div id="ファイルからデータの読み込み" class="section level1">
+<h1>ファイルからデータの読み込み</h1>
+<p>Rにデータを読み込む方法を説明します。なおここでは手元にあるファイルから読み込む方法について触れます。リレーショナル・データベースを利用する方法やWebから取得する方法については割愛します。</p>
+<div id="csvファイルからの読み込み" class="section level2">
+<h2>csvファイルからの読み込み</h2>
+<p>一番基本的な方法となります。大きく2つの方法があります。</p>
+<div id="read.csv関数を利用" class="section level3">
+<h3><code>read.csv()</code>関数を利用</h3>
+<p>例えば、現在の作業ディレクトリに<code>iris-data.csv</code>というファイルがあるとします。これを読み込む場合、以下のコマンドを実行します。</p>
+<pre class="r"><code>iris.data &lt;- read.csv(&quot;iris-data.csv&quot;)</code></pre>
+<p>これを実行すると、<code>iris.data</code>というオブジェクトにcsvファイルの中身が読み込まれます。この場合、以下のような状態となります:</p>
+<ul>
+<li>1行目が変数名として読み込まれる</li>
+<li><code>NA</code>という文字を欠損値となる</li>
+<li>空欄が欠損値となる</li>
+<li>(欠損扱いではない)数値ではない値は文字列として認識
+<ul>
+<li>文字列が含まれる列は(他に数値があっても)全て文字列と判定</li>
+<li>デフォルトの設定では、<strong>Factor型として処理</strong>される</li>
+</ul></li>
+</ul>
+<p>主なデフォルト設定も含めて丁寧に書くと以下のようになります:</p>
+<pre class="r"><code>iris.data &lt;- read.csv(file = &quot;iris-data.csv&quot;, header = TRUE, na.strings = &quot;NA&quot;, stringsAsFactors = default.stringsAsFactors())</code></pre>
+<p>主な引数を説明は以下の通りです:</p>
+<ul>
+<li>file: ファイル名(ファイルパス)。作業ディレクトリからの相対パスで指定します。</li>
+<li>header: 変数名を読み込むかどうか。<code>TRUE</code>なら1行目を変数名として読み込みます。</li>
+<li>na.strings: 欠損値として処理したい値を指定。
+<ul>
+<li>たとえば欠損値として<code>999</code>とか指定して入力していたならば、<code>na.strings = &quot;999&quot;</code></li>
+<li>複数ある場合は、<code>na.strings = c(&quot;999&quot;, &quot;-1&quot;)</code>という感じで指定</li>
+</ul></li>
+<li>stringAsFactors: 文字列の変数をFactor型にするかどうか。
+<ul>
+<li><code>TRUE</code>ならば文字列を含む変数は全てFactor型として処理</li>
+<li><code>FALSE</code>ならば文字列を含む変数は全てCharacter型として処理</li>
+<li>標準でRで設定してあるのは<code>TRUE</code></li>
+<li>個人的には<code>FALSE</code>にしておいて、必要に応じてその変数をFactor型に切り替えてます</li>
+</ul></li>
+</ul>
+</div>
+<div id="rstudioのimport-datasetを利用" class="section level3">
+<h3>RStudioの<strong>import Dataset</strong>を利用</h3>
+<p>RStudioを利用すれば、マウス操作でデータセットを読み込むことができます。</p>
+<p><strong>Environment</strong>タブのところにある<strong>import Dataset</strong>をクリックし、<strong>From Local File…</strong>をクリックします</p>
+<div class="figure">
+<img src="pics/import_dataset.png" />
+
+</div>
+<p>その後、以下のダイアログボックスで指定していきます:</p>
+<div class="figure">
+<img src="pics/import_dialog.png" />
+
+</div>
+<p>ポイントになるところの説明です:</p>
+<ul>
+<li>Name: 読み込んだデータを格納するオブジェクト名</li>
+<li>Encoding: 文字コードを指定します。問題なければそのままで。</li>
+<li>Heading: 1行目を変数名として読み込むかどうか。</li>
+<li>NA Strings: NAにする文字列。上述の通り</li>
+<li>Strings as Factors: 文字列をFactor型にするかどううか。上述の通り。</li>
+</ul>
+<p>つまり、コードでやるのをGUIでできる、というイメージです。慣れないうちはこちらのほうがスムーズかもしれません。慣れてきたら<code>read.csv()</code>などコードで読み込ませるのをおすすめします。</p>
+</div>
+</div>
+<div id="excelファイルからの読み込み" class="section level2">
+<h2>Excelファイルからの読み込み</h2>
+<p>Rは標準ではExcelファイルを直接読み込めませんが、{readxl}パッケージを利用すると直接読み込むことができるようになります:</p>
+<pre class="r"><code># パッケージをインストールしてなければインストール
+# install.packages(readr)
+library(readxl)
+xl_df_1 &lt;- read_excel(&quot;xl_data.xlsx&quot;, sheet = &quot;df_1&quot;)</code></pre>
+<p>第一引数が読み込むファイル名、第二引数が読み込むシートです。日本語のデータも対応しているので、特に問題なくいけます。.xlsと.xlsxの両方共に対応し、マシンにExcelがなくても読み込めます。</p>
+</div>
+<div id="spssファイル.savからの読み込み" class="section level2">
+<h2>SPSSファイル(.sav)からの読み込み</h2>
+<p>Rは標準ではSPSSのファイルを直接読み込めませんが、{haven}パッケージを利用すると直接読み込むことができるようになります:</p>
+<pre class="r"><code># パッケージをインストールしてなければインストール
+# install.packages(haven)
+library(haven)
+sav_df &lt;- read_sav(&quot;hoge.sav&quot;)</code></pre>
+<p>引数には.savファイルを指定してください。なおSPSSにはラベル機能がありますが、この情報は削除されて読み込まれます(たぶん)。</p>
+</div>
+<div id="その他" class="section level2">
+<h2>その他</h2>
+<p>大量のデータを読み込む場合、<code>read.csv()</code>などでは処理に時間がかかることがあります。高速にデータを読み込むために{readr}などが開発されています。気になる方は調べてみてください。</p>
+<p>また、開発版(Preview版)のRStudioでは<strong>Import Dataset</strong>ボタンからcsv, Excel, SPSSなどを選択してデータをインポートできるようになっています(2016/07/16現在)。これらは上記で紹介したパッケージを組み込んだ機能で、GUIにてデータを読み込めるようになります。これは次回の通常版のアップデートで組み込まれるでしょう。</p>
+<p>このようにRStudioを利用すれば簡単にデータを読みこませることができますが、<strong>極力スクリプトにコードを記述して、データを読みこませる</strong>ようにしてください。この方が「どのデータを読み込んだのか」といったことが明確になり、ファイルを取り違えるといった分析者のミスが減少するからです。</p>
+</div>
+</div>
+<div id="まずはとにかく触ってみよう" class="section level1">
+<h1>まずはとにかく触ってみよう</h1>
+<p>まず、Rを使うとどんな感じになるのか、試しに触ってみましょう。それぞれの解説については後述します。</p>
+<div id="データ構造を確認" class="section level2">
+<h2>データ構造を確認</h2>
+<p>Environmentのところにある<code>iris.data</code>をクリックすると、そのデータセットを見ることができます。</p>
+<div class="figure">
+<img src="pics/data_view.png" />
+
+</div>
+<p>また、Consoleで以下のコードを入力してEnterで実行しましょう:</p>
+<pre class="r"><code>str(iris.data)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    150 obs. of  5 variables:
+##  $ Sepal.Length: num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...
+##  $ Sepal.Width : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...
+##  $ Petal.Length: num  1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...
+##  $ Petal.Width : num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...
+##  $ Species     : Factor w/ 3 levels &quot;setosa&quot;,&quot;versicolor&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...</code></pre>
+<p><code>iris.data</code>として読み込んだデータの内容が表示されます。細かいところは省略しますが、大体はつかめるかと思います。</p>
+</div>
+<div id="集計" class="section level2">
+<h2>集計</h2>
+<p>それでは、現在Rにある<code>iris.data</code>というデータセットについて、平均や中央値、最大最小など集計してみましょう。Consoleで以下のコードを入力して実行してください:</p>
+<pre class="r"><code>summary(iris.data)</code></pre>
+<pre><code>##   Sepal.Length    Sepal.Width     Petal.Length    Petal.Width   
+##  Min.   :4.300   Min.   :2.000   Min.   :1.000   Min.   :0.100  
+##  1st Qu.:5.100   1st Qu.:2.800   1st Qu.:1.600   1st Qu.:0.300  
+##  Median :5.800   Median :3.000   Median :4.350   Median :1.300  
+##  Mean   :5.843   Mean   :3.057   Mean   :3.758   Mean   :1.199  
+##  3rd Qu.:6.400   3rd Qu.:3.300   3rd Qu.:5.100   3rd Qu.:1.800  
+##  Max.   :7.900   Max.   :4.400   Max.   :6.900   Max.   :2.500  
+##        Species  
+##  setosa    :50  
+##  versicolor:50  
+##  virginica :50  
+##                 
+##                 
+## </code></pre>
+<p>各変数の基礎統計が算出され、表示されたかと思います。</p>
+</div>
+<div id="分析" class="section level2">
+<h2>分析</h2>
+<p>それでは、Speciesを独立変数、Sepal.Lengthを従属変数とする1要因3水準の分散分析を実施してみます:</p>
+<pre class="r"><code>result &lt;- aov(Sepal.Length ~ Species, data = iris.data)</code></pre>
+<p>これで分散分析の結果がresultに入ってます。ではこの結果の分散分析表を確認します:</p>
+<pre class="r"><code>summary(result)</code></pre>
+<pre><code>##              Df Sum Sq Mean Sq F value Pr(&gt;F)    
+## Species       2  63.21  31.606   119.3 &lt;2e-16 ***
+## Residuals   147  38.96   0.265                   
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>それではこれを多重比較してみます。まずはholmで:</p>
+<pre class="r"><code>pairwise.t.test(iris.data$Sepal.Length, iris.data$Species)</code></pre>
+<pre><code>## 
+##  Pairwise comparisons using t tests with pooled SD 
+## 
+## data:  iris.data$Sepal.Length and iris.data$Species 
+## 
+##            setosa  versicolor
+## versicolor 1.8e-15 -         
+## virginica  &lt; 2e-16 2.8e-09   
+## 
+## P value adjustment method: holm</code></pre>
+<p>次にTukeyのHSDで:</p>
+<pre class="r"><code>TukeyHSD(result)</code></pre>
+<pre><code>##   Tukey multiple comparisons of means
+##     95% family-wise confidence level
+## 
+## Fit: aov(formula = Sepal.Length ~ Species, data = iris.data)
+## 
+## $Species
+##                       diff       lwr       upr p adj
+## versicolor-setosa    0.930 0.6862273 1.1737727     0
+## virginica-setosa     1.582 1.3382273 1.8257727     0
+## virginica-versicolor 0.652 0.4082273 0.8957727     0</code></pre>
+</div>
+<div id="図示" class="section level2">
+<h2>図示</h2>
+<p>これらの結果を図示します。まずは各水準ごとで要約統計量算出:</p>
+<pre class="r"><code>by(iris.data$Sepal.Length, iris.data$Species, summary)</code></pre>
+<pre><code>## iris.data$Species: setosa
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   4.300   4.800   5.000   5.006   5.200   5.800 
+## -------------------------------------------------------- 
+## iris.data$Species: versicolor
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   4.900   5.600   5.900   5.936   6.300   7.000 
+## -------------------------------------------------------- 
+## iris.data$Species: virginica
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##   4.900   6.225   6.500   6.588   6.900   7.900</code></pre>
+<p>これを箱ひげ図でプロット:</p>
+<pre class="r"><code>plot(iris.data$Species, iris.data$Sepal.Length)</code></pre>
+<p><img src="intro_rstudio_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+</div>
+</div>
+<div id="まとめと参考文献" class="section level1">
+<h1>まとめと参考文献</h1>
 <p>[WIP]</p>
+</div>
+<div id="session-info" class="section level1">
+<h1>session info</h1>
 <p>session-info:</p>
 <pre class="r"><code>sessionInfo()</code></pre>
 <pre><code>## R version 3.4.3 (2017-11-30)
@@ -245,6 +601,7 @@ $(document).ready(function () {
 ## [17] crayon_1.3.4     purrr_0.2.4      glue_1.2.0       evaluate_0.10.1 
 ## [21] rmarkdown_1.9    stringi_1.1.7    compiler_3.4.3   pillar_1.2.1    
 ## [25] backports_1.1.2  pkgconfig_2.0.1</code></pre>
+</div>
 
 <footer>
   <p>このWebサイトは2018年3月21日に開催された、日本社会心理学会 第5回春の方法論セミナーで行われた「RとRStudio入門」の公開資料です。</p>
@@ -260,6 +617,8 @@ $(document).ready(function () {
 </script>
 
 
+</div>
+</div>
 
 </div>
 
