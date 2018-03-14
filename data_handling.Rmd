@@ -1,12 +1,568 @@
 ---
 title: "データ操作"
+output:
+  html_document:
+    toc: true
+    toc_float: true
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-[WIP]
+# 列選択
+
+data.frameから列を選択します。ここでは*dplyr*パッケージにある`select`関数を使用します。
+
+## select関数とは
+
+### 使い方と簡単な例
+
+```r
+select(.data, ...)
+```
+
+試しに、`iris`データより`Sepal.Length`と`Species`を取り出してみましょう:
+
+```{r, message=FALSE, warning=FALSE}
+library(dplyr)
+
+select(.data = iris, Sepal.Length, Species)
+```
+
+このように、引数の`...`にピックアップしたい引数を指定すると持ってきてくれます。
+
+また、`-`を変数名の頭につけると、その変数を除外します:
+
+```{r}
+select(iris, -Species)
+select(iris, -c(Sepal.Length, Petal.Length))
+```
+
+## 列選択のための便利関数
+
+*dplyr*には、この列選択のための便利関数がいくつも準備されています:
+
+- `starts_with()`
+- `ends_with()`
+- `contains()`
+- `matches()`
+- `num_range()`
+- `one_of()`
+- `everything()`
+
+これらを使えば、かなり思うように列を選択できるようになります。
+
+### 列名の前方一致 `starts_with()`
+
+列名を前方一致で持ってきます:
+
+```{r}
+select(iris, starts_with("petal"))
+```
+
+なお、上記の通り**デフォルトでは大文字小文字の区別はしません**。区別させたければ、引数として`ignore.case = FALSE`を指定してください:
+
+```{r}
+select(iris, starts_with("petal", ignore.case = FALSE))
+select(iris, starts_with("Petal", ignore.case = FALSE))
+```
+
+### 列名の後方一致 `ends_with()`
+
+列名を後方一致で持ってきます:
+
+```{r}
+select(iris, ends_with("Width"))
+```
+
+上述の`starts_with()`の後方一致版ですので、大文字小文字の扱いも含め同一です。
+
+### 列名の部分一致 `contains()`
+
+列名を部分一致で持ってきます:
+
+```{r}
+select(iris, contains("etal"))
+```
+
+指定した文字列を含む列をすべて選択します。大文字小文字の扱いは上記と同一です。
+
+### 列名の正規表現による一致 `matches()`
+
+正規表現を用いてmatchした列名を全て持ってきます:
+
+```{r}
+select(iris, matches(".t."))
+```
+
+正規表現については省略しますが、少しでも使えるようになると文字列操作が格段に楽になりますのでぜひ機会を見つけて練習してみてください。
+
+### 列名の通し番号を利用した選択 `num_renge()`
+
+よく列名に`x1, x2, x3, ...`というのがあると思います。これを簡単に選択するためのものです。これはirisデータセットではできないのでサンプルデータを準備します:
+
+```{r}
+df <- as.data.frame(matrix(1:30, nrow = 3, ncol = 10))
+colnames(df) <- c(paste0("beer", 1:5), paste0("sake0", 1:5))
+ls(df)
+```
+
+たとえば、ここで「beer1からbeer3までを選択したい」と思ったとします。このような場合には以下のようにします:
+
+```{r}
+select(df, num_range(prefix = "beer", range = 1:3, width = 1))
+```
+
+引数の意味は以下のとおりです;
+
+prefix
+
+: 連番変数の根っこ部分。文字列で指定。
+
+range
+
+: 連番の範囲。数値ベクトルで指定。
+
+width
+
+: **連番の桁数を指定**。
+
+ポイントは引数widthです。これがあるおかげで、以下のようなことが可能です:
+
+```{r}
+select(df, num_range("sake", 2:4, 2))
+```
+
+このように、かなり面倒な「01, 02, 03...」といった連番でも指定することが可能です。これらをbase関数群で実現しようとするとかなり苦労しますがこれなら一発です。
+
+
+# 行選択
+
+行(レコード)を条件によりフィルタリングして、必要な行(レコード)を残します。ここでは*dplyr*パッケージにある`filter`関数を利用します。
+
+## filter関数とは
+
+### 使い方と簡単な例
+
+```r
+filter(.data, ...)
+```
+
+試しに、`iris`データより`Sepal.Length > 6`を満たすレコードを抽出してみます:
+
+```{r, message=FALSE, warning=FALSE}
+library(dplyr)
+filter(iris, Sepal.Length > 6)
+```
+
+このように、引数の`...`にピックアップしたい引数を指定すると持ってきてくれます。また、複数指定することもできます:
+
+```{r}
+filter(iris, Sepal.Length > 6, Species == "versicolor")
+```
+
+出力から、このように続けて指定するとANDになるのがわかりますね。
+
+## 実例
+
+ここからは、以下のコードで作成したデータを用います:
+
+```{r}
+df <- data.frame(x0 = 1:10,
+                x1 = 11:20,
+                s = sample(c("kosaki", "chitoge", "marika"), 10,
+                           replace = TRUE),
+                s2 = sample(c("kosaki", "chitoge", NA), 10,
+                            replace = TRUE),
+                row.names = letters[1:10])
+df
+```
+
+### 数値フィルタ
+
+まずは単一条件についてです:
+
+```{r}
+# 「*に等しい」
+filter(df, x0 == 4)
+
+# 「*と等しくない」
+filter(df, x0 != 4)
+
+# 「*より小さい」
+filter(df, x0 < 4)
+
+# 「*以上」
+filter(df, x0 >= 4)
+
+```
+
+このあたりは出力と比較すればすぐにわかると思います。
+
+次に複数条件についてです:
+
+```{r}
+# 「AかつB」(AND)
+filter(df, x0 < 8 & x1 > 12)
+
+# 「AまたはB」(OR)
+filter(df, x0 > 8 | x1 < 15)
+
+# 「AかつB」の余事象
+filter(df, xor(x0 < 8, x1 > 12))
+
+# 「AからB」
+filter(df, dplyr::between(x0, 3, 7))
+```
+
+論理積(AND)は、上述のように`,`で繋いでいっても反応するのですが、明示的にしたほうがいいでしょう。`between`はdplyrに含まれる関数で、その名の通り区間を指定します。なお指定した範囲の値も含みます。
+
+### 文字列フィルタ
+
+まずは完全一致についてです:
+
+```{r}
+# 「*と一致する」
+filter(df, s == "kosaki")
+
+# 「*と一致しない」
+filter(df, s != "chitoge")
+```
+
+このあたりは数値フィルタと同一です。
+
+次に、「複数の要素のどれかと一致する」ものを抽出する場合です:
+
+```{r}
+filter(df, s %in% c("kosaki", "chitoge"))
+```
+
+この`%in%`はbaseにある演算子で、上記のように「Bの要素のどれか1つにマッチしたらTRUE、どれにもマッチしなければFALSE」を返してくれます。Rを使うなら絶対に覚えたほうがいいでしょう。
+
+なお、この余事象である「複数の要素のどれとも一致しない」ものを抽出する場合です:
+
+```{r}
+filter(df, !s %in% c("marika", "chitoge"))
+```
+
+非常に残念ながら`%nin%`みたいな演算子はbaseには入っていません。そのためそのような演算子を自分で定義するか、それを含むパッケージを読み込む、あるいは上記のコードのように頭に`!`をつけて逆にするあたりが妥当なところでしょう。
+
+次に部分一致についてです。Rのbaseにはgrep系の関数もあるのですが、ここではtidyverseパッケージ群のひとつであるstringrパッケージから、`str_detect`関数を使います:
+
+```{r}
+library(stringr)
+
+# "k"を含む文字列で抽出
+filter(df, str_detect(s, "k"))
+
+# 先頭に"k"を含む文字列で抽出(正規表現によるパターン記述)
+filter(df, str_detect(s, "^k"))
+```
+
+`stringr::str_detect(string, pattern)`はstringで指定した文字列ベクトルから正規表現でpatternと一致するものをTRUE,それ以外をFALSEで返してきます。`grepl`を使うよりも簡単でかつ高速に処理する(はず)なのでこちらをおすすめします。
+
+### NA処理
+
+`is.na()`関数を利用すると簡単に除去/抽出できます:
+
+```{r}
+# s2にNAが含まれているレコードを抽出
+filter(df, is.na(s2))
+
+# s2にNAが含まれていないレコードを抽出
+filter(df, !is.na(s2))
+```
+
+`is.na`は「NAか否か」を判定してTRUEあるいはFALSEを返してきます。なのでこの場合s2にNAがあるレコードを抽出してきます。そのため,`!is.na(s2)`と否定することでs2がNAではないレコードを抽出してくるようになります。
+
+# データ結合
+
+データセットを結合する関数として、`*_join`関数群があります。SQLに慣れている方は、イメージしやすいかと思います。
+
+## 実例
+
+まず、実例に使うデータセットを準備します:
+
+```{r}
+a <- data.frame(x1=c("A","B","C"),x2=1:3)
+b <- data.frame(x1=c("A","B","D"),x3=c(TRUE, FALSE, TRUE))
+y <- data.frame(x1=c("A","B","C"),x2=1:3)
+z <- data.frame(x1=c("B","C","D"),x2=2:4)
+```
+
+aとbを結合する場合、共通する変数はx1ですので、x1をキーにしてmergeします。
+yとzを結合する場合、変数は共通です。行を追加してまとめる、あるいは列を追加してまとめます。
+
+### full_join
+
+```{r}
+library(dplyr)
+full_join(a, b, by = "x1")
+```
+
+全ての行と列を結合します。該当するものがない場合、NAがはいります。また、byでキー変数を指定しますが、変数名は文字列(ダブルクォーテーションで挟む)にしてください。
+
+### inner_join
+
+```{r}
+inner_join(a, b, by = "x1")
+```
+
+両方のデータセットで、共通して存在するもののみを結合します。
+
+### left_join
+
+```{r}
+left_join(a, b, by = "x1")
+```
+
+左側(第一引数)を優先して結合します。なお右側優先で結合する関数(right_join)もありますが省略します。
+
+### bind_cols
+
+```{r}
+bind_cols(y, z)
+```
+
+左側のデータセットに右側の列を追加します。同一名の変数がある場合、被らないように修正されます。また、**行数が一致しないとエラーとなります**。
+
+### bind_rows
+
+```{r}
+bind_rows(y, z)
+bind_rows(y, z, .id = "table_id")
+```
+
+左側のデータセットに右側の行を追加します。列数が一致しないとエラーとなります。また、**`.id`引数を使うと、上述の例のように「どのデータセットから持ってきたか」というのを識別できるような変数を自動で作成**します。
+
+# 新しい変数の生成・値の再割り当て
+
+新たに変数を生成したり、既存の変数に対して値を再割り当てするには、*dplyr*の`mutate`関数を使用します。
+
+## mutate関数とは
+
+データセットに新たに変数を追加する関数です。また、既存の変数の書き換えも可能です。dplyrパッケージでも高頻度で利用される基本的な関数の一つです。
+
+### 使い方と例
+
+```r
+mutate(.data, ...)
+```
+
+試しに、`iris`データの`Sepal.Length`の値を2倍した変数として`kosaki`という変数を作成してみます:
+
+```{r, message=FALSE, warning=FALSE}
+library(dplyr)
+mutate(iris, kosaki = Sepal.Length * 2)
+```
+
+このように、引数の`...`で受け取った内容を評価し、`.data`で指定したデータセットの最後に追加します。また、**変数名として既存の名前を与えると、その変数が上書きされます**:
+
+```{r}
+mutate(iris, Sepal.Length = Sepal.Width * 3)
+```
+
+## 実例
+
+単純な加工なら、上記のような計算式を書けばOKです。また、データベース処理としてよく使われる窓(window)関数がありますが、基本的なものはdplyrパッケージに組み込まれています。このwindow関数を含め、いくつかピックアップします。また、説明用に以下のデータセットを使います:
+
+```{r}
+df <- data.frame(
+  no = 1:7,
+  x1 = c(sample(1:6), NA),
+  s1 = c(LETTERS[1:4], NA, LETTERS[6:7])
+)
+df
+```
+
+### オフセット関数
+
+要するに「*個ずらす」という関数です。差分を出したい時によく使います:
+
+```{r}
+# 1個ずらした変数を作成
+mutate(df, x2 = lag(x1))
+
+# 3個ずらした変数を作成
+mutate(df, x2 = lag(x1, 3))
+
+# ずらした空欄に値を指定
+mutate(df, x2 = lag(x1, 2, default = 0))
+```
+
+また、逆に上へずらす関数もあります:
+
+```{r}
+# 1個ずらした変数を作成
+mutate(df, x2 = lead(x1))
+
+# 3個ずらした変数を作成
+mutate(df, x2 = lead(x1, 3))
+
+# ずらした空欄に値を指定
+mutate(df, x2 = lead(x1, 2, default = 0))
+```
+
+### 累積関数
+
+累積に関するものです:
+
+```{r}
+# 累積和を計算
+mutate(df, x2 = cumsum(x1))
+```
+
+NAが入るとNAになるので注意してください。なお累積関数には他にもいろいろありますので、このページ最後の資料をぜひ参照してみてください。
+
+### 条件による値指定
+
+dplyrには`if_else`という関数があり、条件を指定して値を指定していくことができます:
+
+```{r}
+mutate(df, x2 = if_else(condition = x1 > 3, true = TRUE, false = FALSE))
+```
+
+baseにも`ifelse()`があるのですが、こちらのほうがより厳密で、trueの内容とfalseの内容の処理内容をチェックして、同じ型で同じclassかどうかをみるようです。また、引数に`missing`があり、欠損値への処理ができるようになっています:
+
+```{r}
+mutate(df, x2 = if_else(x1 > 4, "high", "low", ""))
+```
+
+### 条件を指定してNA
+
+条件に合致した値をNAにします:
+
+```{r}
+mutate(df, x2 = na_if(x1, 4))
+```
+
+NAにしたい値は単一の値、もしくはデータセットと同一の長さのベクトルを受け付けるので注意してください。
+
+### 該当する値の書き換え
+
+該当する値を書き換えます:
+
+```{r}
+mutate(df,
+       s2 = recode(s1, A = "kosaki"),
+       s3 = recode(s1, A = "kosaki", .default = "xxx"),
+       x2 = recode(x1, `5` = 55L, `6` = 66L, .default = x1),
+       x3 = recode(x1, `5` = 55L, `6` = 66L, .default = x1, .missing = -1L))
+```
+
+出力結果を確認してもらえればわかるかと思います。なお、数値の場合``5``のようにバッククォートで挟む必要があり、書き換える値で`55L`としているのは、Rで数値の末尾にLをつけるとそれを数値として扱うようするためです。このようにrecodeは型に対して厳し目になっています。
+
+### 複数の条件で場合分け
+
+`if_else()`の複数ケースで、まとめて処理できます:
+
+```{r}
+mutate(df,
+       x2 = case_when(
+         no %% 2 == 0 ~ "Even",
+         no %% 2 == 1 ~ "Odd",
+         TRUE ~ as.character(x1)
+       ),
+       x3 = case_when(
+         no <= 3 ~ x1 * -2,
+         between(no, 3, 5) ~ as.numeric(x1),
+         TRUE ~ no ^ 2
+       ),
+       s2 = case_when(
+         s1 == "A" ~ "kosaki"
+       ),
+       s3 = case_when(
+         s1 == "A" ~ "kosaki",
+         TRUE ~ as.character(s1)
+       ),
+       s4 = case_when(
+         TRUE ~ as.character(s1),
+         s1 == "A" ~ "chitoge"
+       ))
+```
+
+`case_when()`では複数の条件を指定していくことができ，引数に論理式と置き換える値を記述していきます。この際，`~`を利用したformulaを使用します。
+
+また，論理式で拾えなかった要素については全て`NA`が返ってきます。なお，「それ以外」を指し示すのは`TRUE`で，上記のように`~`の左辺に記述すればOKです。
+
+注意事項ですが，順番が重要で最初に書いてあるものが優先されます。s3とs4のコードと出力を比較してください。
+
+# データのグループ化と要約統計量
+
+「ある変数の値ごとに処理をして平均や標準偏差を算出したい」という時には、グループ化の処理を行います。ここでは*dplyr*パッケージの`group_by`関数を利用します。
+
+また、集計をするには*dplyr*パッケージの`summarize`関数もしくは`summarise`関数を利用します。
+
+## 実例
+
+```{r}
+library(dplyr)
+df <- group_by(iris, Species)
+df
+```
+
+見た目では変化していないように見えますが、これでグループ化されて処理されるようになります:
+
+```{r}
+mutate(df, x1 = cumsum(Sepal.Length))
+```
+
+また、多くの場合集計に利用します:
+
+```{r}
+# irisでそのまま集計した場合:
+summarize(iris, n = n(), mean = mean(Sepal.Length), sd = sd(Sepal.Length))
+
+# group_byしたあと:
+summarize(df, n = n(), mean = mean(Sepal.Length), sd = sd(Sepal.Length))
+```
+
+なお、グループ化を解除するにはungroup関数を使います
+
+```{r}
+df2 <- ungroup(df)
+summarize(df2, n = n(), mean = mean(Sepal.Length), sd = sd(Sepal.Length))
+```
+
+データセットを縦型(long型)あるいは横型(wide型)へと変換します。tidy dataという考え方がポイントになりますので、このあたりについては一度別資料を探してみてください。
+
+## 実例
+
+### 縦型へ変換
+
+tidyrパッケージのgather関数で行えます:
+
+```{r}
+library(tidyr)
+gather(iris, key = hoge, value = fuga, -Species)
+```
+
+keyには、まとめた時に「この行の値はどの変数に入ってたものか」を示す変数名を指定します。またvalueには、まとめた変数の値が格納されます。その後ろに、まとめ上げる変数群を指定します。ここではdplyr::select()のテクニックがそのまま使えます。
+
+
+### 横型へ変換
+
+tidyrパッケージのspread関数で行えます:
+
+```{r}
+# irisにidの列を追加して、一旦gatherでまとめます
+library(dplyr)
+df <- mutate(iris, id = rownames(iris))
+df <- gather(df, key = hoge, value = fuga, contains("l."))
+head(df)
+
+# これを再度バラします
+spread(df, key = hoge, value = fuga)
+```
+
+このようにgatherとspreadは対応しています。なお、spreadを実行する際、処理後に各レコードが一意に特定できる列(主キーにあたるようなもの)が必要となります。関数の引数で指定する必要はないのですが、これがないと展開してくれずエラーを返すので注意してください。
+
+# まとめと参考資料
+
+# session info
+
+このページを実行した環境は以下のとおりです:
 
 ```{r, child="_session_info.Rmd"}
 

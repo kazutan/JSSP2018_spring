@@ -76,6 +76,7 @@ h6 {
 }
 </style>
 
+<link rel="stylesheet" href="styles.css" type="text/css" />
 <link rel="stylesheet" href="styles_customized.css" type="text/css" />
 
 </head>
@@ -341,12 +342,14 @@ print(g)</code></pre>
 <p>ではいよいよ可視化に取り掛かりましょう。ここではRに最初から入っている<code>mtcars</code>データセットを用います。このデータセットには，32種類の自動車の性能に関するデータが収められています。各変数の詳細は，Rのコンソールで<code>?mtcars</code>と入力して確認してください。</p>
 <pre class="r"><code>data(mtcars)
 head(x = mtcars, n = 5)  #5行だけ表示</code></pre>
-<pre><code>                   mpg cyl disp  hp drat    wt  qsec vs am gear carb
-Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
-Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
-Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
-Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
-Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2</code></pre>
+<pre><code># A tibble: 5 x 11
+    mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb
+* &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1  21.0    6.  160.  110.  3.90  2.62  16.5    0.    1.    4.    4.
+2  21.0    6.  160.  110.  3.90  2.88  17.0    0.    1.    4.    4.
+3  22.8    4.  108.   93.  3.85  2.32  18.6    1.    1.    4.    1.
+4  21.4    6.  258.  110.  3.08  3.22  19.4    1.    0.    3.    1.
+5  18.7    8.  360.  175.  3.15  3.44  17.0    0.    0.    3.    2.</code></pre>
 <p>ggplot2では，データを<strong>幾何学的オブジェクト（geometric object）</strong>に当てはめて可視化します。クッキーを作るために生地を作った時，星や円等の様々な型を押し当てると，その通りの形にくりぬくことが出来るのとと同じように，データを<code>geom_bar()</code>に与えると棒グラフが，<code>geom_point()</code>に与えると散布図が出来上がるわけです。</p>
 <p>代表的なgeomを以下に抜粋しました。これらはほんの一部に過ぎず，ggplot2には非常に多くのgeomが用意されています。詳しくは<a href="http://ggplot2.tidyverse.org/reference/index.html">公式サイト</a>を参照してください。事例もコード付きで紹介されているので，非常に助かります。</p>
 <table>
