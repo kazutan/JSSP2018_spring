@@ -27,9 +27,11 @@ opts_knit$set(width=75)
 
 #可視化の重要性
 
-セミナー当日に，別スライドにて紹介。引用文献は以下の論文。
+セミナー当日に，別スライドにて紹介。主な引用文献は以下。
 
-[Weissgerber, T. L., Milic, N. M., Winham, S. J., & Garovic, V. D. (2015). Beyond bar and line graphs: time for a new data presentation paradigm. PLoS biology, 13(4), e1002128](http://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.1002128)
+- [Weissgerber, T. L., Milic, N. M., Winham, S. J., & Garovic, V. D. (2015). Beyond bar and line graphs: time for a new data presentation paradigm. PLoS biology, 13(4), e1002128](http://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.1002128)
+- [Download the Datasaurus: Never trust summary statistics alone; always visualize your data](http://www.thefunctionalart.com/2016/08/download-datasaurus-never-trust-summary.html)
+- [Same Stats, Different Graphs: Generating Datasets with Varied Appearance and Identical Statistics through Simulated Annealing](https://www.autodeskresearch.com/publications/samestats)
 
 # ggplot2による可視化の文法
 ## 初期準備
@@ -44,10 +46,6 @@ library(tidyverse)
 ```{r package_setup_1, eval=FALSE}
 install.packages("tidyverse")
 library(tidyverse)
-
-#または
-#install.packages("ggplot2")
-#library(ggplot2)
 ```
 
 もう一つだけ準備をしましょう。ggplot2は，幾重にも絵具を重ねて最終的に一枚の絵を描く，油絵のような描画システムです。そこで，まずは新品のキャンバスを用意しましょう。以下のコードでは，新品のキャンバスを，`g`というオブジェクトに格納しています。
@@ -75,6 +73,8 @@ ggplot2では，データを**幾何学的オブジェクト（geometric object�
 | `geom_bar()`       |  棒グラフ        |
 | `geom_line()`      |  折れ線グラフ    |
 | `geom_point()`     |  散布図          |
+| `geom_boxplot()`   |  箱ひげ図　　    |
+| `geom_errorbar()`  |  誤差棒          |
 
 では記法を説明します。ここでは排気量`disp`と車体重量`wt`の関係を散布図で表します。
 最低限必要な記述は以下の二点です。
