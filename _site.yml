@@ -15,6 +15,7 @@ navbar:
 output:
   html_document:
     theme: yeti
+    df_print: tibble
     highlight: textmate
     md_extensions: -ascii_identifiers
     include:

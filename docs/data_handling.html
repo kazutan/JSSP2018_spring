@@ -19,6 +19,9 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -167,6 +170,101 @@ $(document).ready(function () {
 
 
 
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
 
 
 <div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
@@ -212,7 +310,960 @@ $(document).ready(function () {
 </div>
 
 
-<p>[WIP]</p>
+<div id="列選択" class="section level1">
+<h1>列選択</h1>
+<p>data.frameから列を選択します。ここでは<em>dplyr</em>パッケージにある<code>select</code>関数を使用します。</p>
+<div id="select関数とは" class="section level2">
+<h2>select関数とは</h2>
+<div id="使い方と簡単な例" class="section level3">
+<h3>使い方と簡単な例</h3>
+<pre class="r"><code>select(.data, ...)</code></pre>
+<p>試しに、<code>iris</code>データより<code>Sepal.Length</code>と<code>Species</code>を取り出してみましょう:</p>
+<pre class="r"><code>library(dplyr)
+
+select(.data = iris, Sepal.Length, Species)</code></pre>
+<pre><code>## # A tibble: 150 x 2
+##    Sepal.Length Species
+##           &lt;dbl&gt; &lt;fct&gt;  
+##  1         5.10 setosa 
+##  2         4.90 setosa 
+##  3         4.70 setosa 
+##  4         4.60 setosa 
+##  5         5.00 setosa 
+##  6         5.40 setosa 
+##  7         4.60 setosa 
+##  8         5.00 setosa 
+##  9         4.40 setosa 
+## 10         4.90 setosa 
+## # ... with 140 more rows</code></pre>
+<p>このように、引数の<code>...</code>にピックアップしたい引数を指定すると持ってきてくれます。</p>
+<p>また、<code>-</code>を変数名の頭につけると、その変数を除外します:</p>
+<pre class="r"><code>select(iris, -Species)</code></pre>
+<pre><code>## # A tibble: 150 x 4
+##    Sepal.Length Sepal.Width Petal.Length Petal.Width
+##           &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt;
+##  1         5.10        3.50         1.40       0.200
+##  2         4.90        3.00         1.40       0.200
+##  3         4.70        3.20         1.30       0.200
+##  4         4.60        3.10         1.50       0.200
+##  5         5.00        3.60         1.40       0.200
+##  6         5.40        3.90         1.70       0.400
+##  7         4.60        3.40         1.40       0.300
+##  8         5.00        3.40         1.50       0.200
+##  9         4.40        2.90         1.40       0.200
+## 10         4.90        3.10         1.50       0.100
+## # ... with 140 more rows</code></pre>
+<pre class="r"><code>select(iris, -c(Sepal.Length, Petal.Length))</code></pre>
+<pre><code>## # A tibble: 150 x 3
+##    Sepal.Width Petal.Width Species
+##          &lt;dbl&gt;       &lt;dbl&gt; &lt;fct&gt;  
+##  1        3.50       0.200 setosa 
+##  2        3.00       0.200 setosa 
+##  3        3.20       0.200 setosa 
+##  4        3.10       0.200 setosa 
+##  5        3.60       0.200 setosa 
+##  6        3.90       0.400 setosa 
+##  7        3.40       0.300 setosa 
+##  8        3.40       0.200 setosa 
+##  9        2.90       0.200 setosa 
+## 10        3.10       0.100 setosa 
+## # ... with 140 more rows</code></pre>
+</div>
+</div>
+<div id="列選択のための便利関数" class="section level2">
+<h2>列選択のための便利関数</h2>
+<p><em>dplyr</em>には、この列選択のための便利関数がいくつも準備されています:</p>
+<ul>
+<li><code>starts_with()</code></li>
+<li><code>ends_with()</code></li>
+<li><code>contains()</code></li>
+<li><code>matches()</code></li>
+<li><code>num_range()</code></li>
+<li><code>one_of()</code></li>
+<li><code>everything()</code></li>
+</ul>
+<p>これらを使えば、かなり思うように列を選択できるようになります。</p>
+<div id="列名の前方一致-starts_with" class="section level3">
+<h3>列名の前方一致 <code>starts_with()</code></h3>
+<p>列名を前方一致で持ってきます:</p>
+<pre class="r"><code>select(iris, starts_with(&quot;petal&quot;))</code></pre>
+<pre><code>## # A tibble: 150 x 2
+##    Petal.Length Petal.Width
+##           &lt;dbl&gt;       &lt;dbl&gt;
+##  1         1.40       0.200
+##  2         1.40       0.200
+##  3         1.30       0.200
+##  4         1.50       0.200
+##  5         1.40       0.200
+##  6         1.70       0.400
+##  7         1.40       0.300
+##  8         1.50       0.200
+##  9         1.40       0.200
+## 10         1.50       0.100
+## # ... with 140 more rows</code></pre>
+<p>なお、上記の通り<strong>デフォルトでは大文字小文字の区別はしません</strong>。区別させたければ、引数として<code>ignore.case = FALSE</code>を指定してください:</p>
+<pre class="r"><code>select(iris, starts_with(&quot;petal&quot;, ignore.case = FALSE))</code></pre>
+<pre><code>## # A tibble: 150 x 0</code></pre>
+<pre class="r"><code>select(iris, starts_with(&quot;Petal&quot;, ignore.case = FALSE))</code></pre>
+<pre><code>## # A tibble: 150 x 2
+##    Petal.Length Petal.Width
+##           &lt;dbl&gt;       &lt;dbl&gt;
+##  1         1.40       0.200
+##  2         1.40       0.200
+##  3         1.30       0.200
+##  4         1.50       0.200
+##  5         1.40       0.200
+##  6         1.70       0.400
+##  7         1.40       0.300
+##  8         1.50       0.200
+##  9         1.40       0.200
+## 10         1.50       0.100
+## # ... with 140 more rows</code></pre>
+</div>
+<div id="列名の後方一致-ends_with" class="section level3">
+<h3>列名の後方一致 <code>ends_with()</code></h3>
+<p>列名を後方一致で持ってきます:</p>
+<pre class="r"><code>select(iris, ends_with(&quot;Width&quot;))</code></pre>
+<pre><code>## # A tibble: 150 x 2
+##    Sepal.Width Petal.Width
+##          &lt;dbl&gt;       &lt;dbl&gt;
+##  1        3.50       0.200
+##  2        3.00       0.200
+##  3        3.20       0.200
+##  4        3.10       0.200
+##  5        3.60       0.200
+##  6        3.90       0.400
+##  7        3.40       0.300
+##  8        3.40       0.200
+##  9        2.90       0.200
+## 10        3.10       0.100
+## # ... with 140 more rows</code></pre>
+<p>上述の<code>starts_with()</code>の後方一致版ですので、大文字小文字の扱いも含め同一です。</p>
+</div>
+<div id="列名の部分一致-contains" class="section level3">
+<h3>列名の部分一致 <code>contains()</code></h3>
+<p>列名を部分一致で持ってきます:</p>
+<pre class="r"><code>select(iris, contains(&quot;etal&quot;))</code></pre>
+<pre><code>## # A tibble: 150 x 2
+##    Petal.Length Petal.Width
+##           &lt;dbl&gt;       &lt;dbl&gt;
+##  1         1.40       0.200
+##  2         1.40       0.200
+##  3         1.30       0.200
+##  4         1.50       0.200
+##  5         1.40       0.200
+##  6         1.70       0.400
+##  7         1.40       0.300
+##  8         1.50       0.200
+##  9         1.40       0.200
+## 10         1.50       0.100
+## # ... with 140 more rows</code></pre>
+<p>指定した文字列を含む列をすべて選択します。大文字小文字の扱いは上記と同一です。</p>
+</div>
+<div id="列名の正規表現による一致-matches" class="section level3">
+<h3>列名の正規表現による一致 <code>matches()</code></h3>
+<p>正規表現を用いてmatchした列名を全て持ってきます:</p>
+<pre class="r"><code>select(iris, matches(&quot;.t.&quot;))</code></pre>
+<pre><code>## # A tibble: 150 x 4
+##    Sepal.Length Sepal.Width Petal.Length Petal.Width
+##           &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt;
+##  1         5.10        3.50         1.40       0.200
+##  2         4.90        3.00         1.40       0.200
+##  3         4.70        3.20         1.30       0.200
+##  4         4.60        3.10         1.50       0.200
+##  5         5.00        3.60         1.40       0.200
+##  6         5.40        3.90         1.70       0.400
+##  7         4.60        3.40         1.40       0.300
+##  8         5.00        3.40         1.50       0.200
+##  9         4.40        2.90         1.40       0.200
+## 10         4.90        3.10         1.50       0.100
+## # ... with 140 more rows</code></pre>
+<p>正規表現については省略しますが、少しでも使えるようになると文字列操作が格段に楽になりますのでぜひ機会を見つけて練習してみてください。</p>
+</div>
+<div id="列名の通し番号を利用した選択-num_renge" class="section level3">
+<h3>列名の通し番号を利用した選択 <code>num_renge()</code></h3>
+<p>よく列名に<code>x1, x2, x3, ...</code>というのがあると思います。これを簡単に選択するためのものです。これはirisデータセットではできないのでサンプルデータを準備します:</p>
+<pre class="r"><code>df &lt;- as.data.frame(matrix(1:30, nrow = 3, ncol = 10))
+colnames(df) &lt;- c(paste0(&quot;beer&quot;, 1:5), paste0(&quot;sake0&quot;, 1:5))
+ls(df)</code></pre>
+<pre><code>##  [1] &quot;beer1&quot;  &quot;beer2&quot;  &quot;beer3&quot;  &quot;beer4&quot;  &quot;beer5&quot;  &quot;sake01&quot; &quot;sake02&quot;
+##  [8] &quot;sake03&quot; &quot;sake04&quot; &quot;sake05&quot;</code></pre>
+<p>たとえば、ここで「beer1からbeer3までを選択したい」と思ったとします。このような場合には以下のようにします:</p>
+<pre class="r"><code>select(df, num_range(prefix = &quot;beer&quot;, range = 1:3, width = 1))</code></pre>
+<pre><code>## # A tibble: 3 x 3
+##   beer1 beer2 beer3
+##   &lt;int&gt; &lt;int&gt; &lt;int&gt;
+## 1     1     4     7
+## 2     2     5     8
+## 3     3     6     9</code></pre>
+<p>引数の意味は以下のとおりです;</p>
+<dl>
+<dt>prefix</dt>
+<dd><p>連番変数の根っこ部分。文字列で指定。</p>
+</dd>
+<dt>range</dt>
+<dd><p>連番の範囲。数値ベクトルで指定。</p>
+</dd>
+<dt>width</dt>
+<dd><p><strong>連番の桁数を指定</strong>。</p>
+</dd>
+</dl>
+<p>ポイントは引数widthです。これがあるおかげで、以下のようなことが可能です:</p>
+<pre class="r"><code>select(df, num_range(&quot;sake&quot;, 2:4, 2))</code></pre>
+<pre><code>## # A tibble: 3 x 3
+##   sake02 sake03 sake04
+##    &lt;int&gt;  &lt;int&gt;  &lt;int&gt;
+## 1     19     22     25
+## 2     20     23     26
+## 3     21     24     27</code></pre>
+<p>このように、かなり面倒な「01, 02, 03…」といった連番でも指定することが可能です。これらをbase関数群で実現しようとするとかなり苦労しますがこれなら一発です。</p>
+</div>
+</div>
+</div>
+<div id="行選択" class="section level1">
+<h1>行選択</h1>
+<p>行(レコード)を条件によりフィルタリングして、必要な行(レコード)を残します。ここでは<em>dplyr</em>パッケージにある<code>filter</code>関数を利用します。</p>
+<div id="filter関数とは" class="section level2">
+<h2>filter関数とは</h2>
+<div id="使い方と簡単な例-1" class="section level3">
+<h3>使い方と簡単な例</h3>
+<pre class="r"><code>filter(.data, ...)</code></pre>
+<p>試しに、<code>iris</code>データより<code>Sepal.Length &gt; 6</code>を満たすレコードを抽出してみます:</p>
+<pre class="r"><code>library(dplyr)
+filter(iris, Sepal.Length &gt; 6)</code></pre>
+<pre><code>## # A tibble: 61 x 5
+##    Sepal.Length Sepal.Width Petal.Length Petal.Width Species   
+##           &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt; &lt;fct&gt;     
+##  1         7.00        3.20         4.70        1.40 versicolor
+##  2         6.40        3.20         4.50        1.50 versicolor
+##  3         6.90        3.10         4.90        1.50 versicolor
+##  4         6.50        2.80         4.60        1.50 versicolor
+##  5         6.30        3.30         4.70        1.60 versicolor
+##  6         6.60        2.90         4.60        1.30 versicolor
+##  7         6.10        2.90         4.70        1.40 versicolor
+##  8         6.70        3.10         4.40        1.40 versicolor
+##  9         6.20        2.20         4.50        1.50 versicolor
+## 10         6.10        2.80         4.00        1.30 versicolor
+## # ... with 51 more rows</code></pre>
+<p>このように、引数の<code>...</code>にピックアップしたい引数を指定すると持ってきてくれます。また、複数指定することもできます:</p>
+<pre class="r"><code>filter(iris, Sepal.Length &gt; 6, Species == &quot;versicolor&quot;)</code></pre>
+<pre><code>## # A tibble: 20 x 5
+##    Sepal.Length Sepal.Width Petal.Length Petal.Width Species   
+##           &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt; &lt;fct&gt;     
+##  1         7.00        3.20         4.70        1.40 versicolor
+##  2         6.40        3.20         4.50        1.50 versicolor
+##  3         6.90        3.10         4.90        1.50 versicolor
+##  4         6.50        2.80         4.60        1.50 versicolor
+##  5         6.30        3.30         4.70        1.60 versicolor
+##  6         6.60        2.90         4.60        1.30 versicolor
+##  7         6.10        2.90         4.70        1.40 versicolor
+##  8         6.70        3.10         4.40        1.40 versicolor
+##  9         6.20        2.20         4.50        1.50 versicolor
+## 10         6.10        2.80         4.00        1.30 versicolor
+## 11         6.30        2.50         4.90        1.50 versicolor
+## 12         6.10        2.80         4.70        1.20 versicolor
+## 13         6.40        2.90         4.30        1.30 versicolor
+## 14         6.60        3.00         4.40        1.40 versicolor
+## 15         6.80        2.80         4.80        1.40 versicolor
+## 16         6.70        3.00         5.00        1.70 versicolor
+## 17         6.70        3.10         4.70        1.50 versicolor
+## 18         6.30        2.30         4.40        1.30 versicolor
+## 19         6.10        3.00         4.60        1.40 versicolor
+## 20         6.20        2.90         4.30        1.30 versicolor</code></pre>
+<p>出力から、このように続けて指定するとANDになるのがわかりますね。</p>
+</div>
+</div>
+<div id="実例" class="section level2">
+<h2>実例</h2>
+<p>ここからは、以下のコードで作成したデータを用います:</p>
+<pre class="r"><code>df &lt;- data.frame(x0 = 1:10,
+                x1 = 11:20,
+                s = sample(c(&quot;kosaki&quot;, &quot;chitoge&quot;, &quot;marika&quot;), 10,
+                           replace = TRUE),
+                s2 = sample(c(&quot;kosaki&quot;, &quot;chitoge&quot;, NA), 10,
+                            replace = TRUE),
+                row.names = letters[1:10])
+df</code></pre>
+<pre><code>## # A tibble: 10 x 4
+##       x0    x1 s       s2     
+##  * &lt;int&gt; &lt;int&gt; &lt;fct&gt;   &lt;fct&gt;  
+##  1     1    11 chitoge kosaki 
+##  2     2    12 marika  chitoge
+##  3     3    13 chitoge kosaki 
+##  4     4    14 kosaki  &lt;NA&gt;   
+##  5     5    15 chitoge &lt;NA&gt;   
+##  6     6    16 chitoge chitoge
+##  7     7    17 chitoge &lt;NA&gt;   
+##  8     8    18 marika  chitoge
+##  9     9    19 chitoge kosaki 
+## 10    10    20 marika  kosaki</code></pre>
+<div id="数値フィルタ" class="section level3">
+<h3>数値フィルタ</h3>
+<p>まずは単一条件についてです:</p>
+<pre class="r"><code># 「*に等しい」
+filter(df, x0 == 4)</code></pre>
+<pre><code>## # A tibble: 1 x 4
+##      x0    x1 s      s2   
+##   &lt;int&gt; &lt;int&gt; &lt;fct&gt;  &lt;fct&gt;
+## 1     4    14 kosaki &lt;NA&gt;</code></pre>
+<pre class="r"><code># 「*と等しくない」
+filter(df, x0 != 4)</code></pre>
+<pre><code>## # A tibble: 9 x 4
+##      x0    x1 s       s2     
+##   &lt;int&gt; &lt;int&gt; &lt;fct&gt;   &lt;fct&gt;  
+## 1     1    11 chitoge kosaki 
+## 2     2    12 marika  chitoge
+## 3     3    13 chitoge kosaki 
+## 4     5    15 chitoge &lt;NA&gt;   
+## 5     6    16 chitoge chitoge
+## 6     7    17 chitoge &lt;NA&gt;   
+## 7     8    18 marika  chitoge
+## 8     9    19 chitoge kosaki 
+## 9    10    20 marika  kosaki</code></pre>
+<pre class="r"><code># 「*より小さい」
+filter(df, x0 &lt; 4)</code></pre>
+<pre><code>## # A tibble: 3 x 4
+##      x0    x1 s       s2     
+##   &lt;int&gt; &lt;int&gt; &lt;fct&gt;   &lt;fct&gt;  
+## 1     1    11 chitoge kosaki 
+## 2     2    12 marika  chitoge
+## 3     3    13 chitoge kosaki</code></pre>
+<pre class="r"><code># 「*以上」
+filter(df, x0 &gt;= 4)</code></pre>
+<pre><code>## # A tibble: 7 x 4
+##      x0    x1 s       s2     
+##   &lt;int&gt; &lt;int&gt; &lt;fct&gt;   &lt;fct&gt;  
+## 1     4    14 kosaki  &lt;NA&gt;   
+## 2     5    15 chitoge &lt;NA&gt;   
+## 3     6    16 chitoge chitoge
+## 4     7    17 chitoge &lt;NA&gt;   
+## 5     8    18 marika  chitoge
+## 6     9    19 chitoge kosaki 
+## 7    10    20 marika  kosaki</code></pre>
+<p>このあたりは出力と比較すればすぐにわかると思います。</p>
+<p>次に複数条件についてです:</p>
+<pre class="r"><code># 「AかつB」(AND)
+filter(df, x0 &lt; 8 &amp; x1 &gt; 12)</code></pre>
+<pre><code>## # A tibble: 5 x 4
+##      x0    x1 s       s2     
+##   &lt;int&gt; &lt;int&gt; &lt;fct&gt;   &lt;fct&gt;  
+## 1     3    13 chitoge kosaki 
+## 2     4    14 kosaki  &lt;NA&gt;   
+## 3     5    15 chitoge &lt;NA&gt;   
+## 4     6    16 chitoge chitoge
+## 5     7    17 chitoge &lt;NA&gt;</code></pre>
+<pre class="r"><code># 「AまたはB」(OR)
+filter(df, x0 &gt; 8 | x1 &lt; 15)</code></pre>
+<pre><code>## # A tibble: 6 x 4
+##      x0    x1 s       s2     
+##   &lt;int&gt; &lt;int&gt; &lt;fct&gt;   &lt;fct&gt;  
+## 1     1    11 chitoge kosaki 
+## 2     2    12 marika  chitoge
+## 3     3    13 chitoge kosaki 
+## 4     4    14 kosaki  &lt;NA&gt;   
+## 5     9    19 chitoge kosaki 
+## 6    10    20 marika  kosaki</code></pre>
+<pre class="r"><code># 「AかつB」の余事象
+filter(df, xor(x0 &lt; 8, x1 &gt; 12))</code></pre>
+<pre><code>## # A tibble: 5 x 4
+##      x0    x1 s       s2     
+##   &lt;int&gt; &lt;int&gt; &lt;fct&gt;   &lt;fct&gt;  
+## 1     1    11 chitoge kosaki 
+## 2     2    12 marika  chitoge
+## 3     8    18 marika  chitoge
+## 4     9    19 chitoge kosaki 
+## 5    10    20 marika  kosaki</code></pre>
+<pre class="r"><code># 「AからB」
+filter(df, dplyr::between(x0, 3, 7))</code></pre>
+<pre><code>## # A tibble: 5 x 4
+##      x0    x1 s       s2     
+##   &lt;int&gt; &lt;int&gt; &lt;fct&gt;   &lt;fct&gt;  
+## 1     3    13 chitoge kosaki 
+## 2     4    14 kosaki  &lt;NA&gt;   
+## 3     5    15 chitoge &lt;NA&gt;   
+## 4     6    16 chitoge chitoge
+## 5     7    17 chitoge &lt;NA&gt;</code></pre>
+<p>論理積(AND)は、上述のように<code>,</code>で繋いでいっても反応するのですが、明示的にしたほうがいいでしょう。<code>between</code>はdplyrに含まれる関数で、その名の通り区間を指定します。なお指定した範囲の値も含みます。</p>
+</div>
+<div id="文字列フィルタ" class="section level3">
+<h3>文字列フィルタ</h3>
+<p>まずは完全一致についてです:</p>
+<pre class="r"><code># 「*と一致する」
+filter(df, s == &quot;kosaki&quot;)</code></pre>
+<pre><code>## # A tibble: 1 x 4
+##      x0    x1 s      s2   
+##   &lt;int&gt; &lt;int&gt; &lt;fct&gt;  &lt;fct&gt;
+## 1     4    14 kosaki &lt;NA&gt;</code></pre>
+<pre class="r"><code># 「*と一致しない」
+filter(df, s != &quot;chitoge&quot;)</code></pre>
+<pre><code>## # A tibble: 4 x 4
+##      x0    x1 s      s2     
+##   &lt;int&gt; &lt;int&gt; &lt;fct&gt;  &lt;fct&gt;  
+## 1     2    12 marika chitoge
+## 2     4    14 kosaki &lt;NA&gt;   
+## 3     8    18 marika chitoge
+## 4    10    20 marika kosaki</code></pre>
+<p>このあたりは数値フィルタと同一です。</p>
+<p>次に、「複数の要素のどれかと一致する」ものを抽出する場合です:</p>
+<pre class="r"><code>filter(df, s %in% c(&quot;kosaki&quot;, &quot;chitoge&quot;))</code></pre>
+<pre><code>## # A tibble: 7 x 4
+##      x0    x1 s       s2     
+##   &lt;int&gt; &lt;int&gt; &lt;fct&gt;   &lt;fct&gt;  
+## 1     1    11 chitoge kosaki 
+## 2     3    13 chitoge kosaki 
+## 3     4    14 kosaki  &lt;NA&gt;   
+## 4     5    15 chitoge &lt;NA&gt;   
+## 5     6    16 chitoge chitoge
+## 6     7    17 chitoge &lt;NA&gt;   
+## 7     9    19 chitoge kosaki</code></pre>
+<p>この<code>%in%</code>はbaseにある演算子で、上記のように「Bの要素のどれか1つにマッチしたらTRUE、どれにもマッチしなければFALSE」を返してくれます。Rを使うなら絶対に覚えたほうがいいでしょう。</p>
+<p>なお、この余事象である「複数の要素のどれとも一致しない」ものを抽出する場合です:</p>
+<pre class="r"><code>filter(df, !s %in% c(&quot;marika&quot;, &quot;chitoge&quot;))</code></pre>
+<pre><code>## # A tibble: 1 x 4
+##      x0    x1 s      s2   
+##   &lt;int&gt; &lt;int&gt; &lt;fct&gt;  &lt;fct&gt;
+## 1     4    14 kosaki &lt;NA&gt;</code></pre>
+<p>非常に残念ながら<code>%nin%</code>みたいな演算子はbaseには入っていません。そのためそのような演算子を自分で定義するか、それを含むパッケージを読み込む、あるいは上記のコードのように頭に<code>!</code>をつけて逆にするあたりが妥当なところでしょう。</p>
+<p>次に部分一致についてです。Rのbaseにはgrep系の関数もあるのですが、ここではtidyverseパッケージ群のひとつであるstringrパッケージから、<code>str_detect</code>関数を使います:</p>
+<pre class="r"><code>library(stringr)
+
+# &quot;k&quot;を含む文字列で抽出
+filter(df, str_detect(s, &quot;k&quot;))</code></pre>
+<pre><code>## # A tibble: 4 x 4
+##      x0    x1 s      s2     
+##   &lt;int&gt; &lt;int&gt; &lt;fct&gt;  &lt;fct&gt;  
+## 1     2    12 marika chitoge
+## 2     4    14 kosaki &lt;NA&gt;   
+## 3     8    18 marika chitoge
+## 4    10    20 marika kosaki</code></pre>
+<pre class="r"><code># 先頭に&quot;k&quot;を含む文字列で抽出(正規表現によるパターン記述)
+filter(df, str_detect(s, &quot;^k&quot;))</code></pre>
+<pre><code>## # A tibble: 1 x 4
+##      x0    x1 s      s2   
+##   &lt;int&gt; &lt;int&gt; &lt;fct&gt;  &lt;fct&gt;
+## 1     4    14 kosaki &lt;NA&gt;</code></pre>
+<p><code>stringr::str_detect(string, pattern)</code>はstringで指定した文字列ベクトルから正規表現でpatternと一致するものをTRUE,それ以外をFALSEで返してきます。<code>grepl</code>を使うよりも簡単でかつ高速に処理する(はず)なのでこちらをおすすめします。</p>
+</div>
+<div id="na処理" class="section level3">
+<h3>NA処理</h3>
+<p><code>is.na()</code>関数を利用すると簡単に除去/抽出できます:</p>
+<pre class="r"><code># s2にNAが含まれているレコードを抽出
+filter(df, is.na(s2))</code></pre>
+<pre><code>## # A tibble: 3 x 4
+##      x0    x1 s       s2   
+##   &lt;int&gt; &lt;int&gt; &lt;fct&gt;   &lt;fct&gt;
+## 1     4    14 kosaki  &lt;NA&gt; 
+## 2     5    15 chitoge &lt;NA&gt; 
+## 3     7    17 chitoge &lt;NA&gt;</code></pre>
+<pre class="r"><code># s2にNAが含まれていないレコードを抽出
+filter(df, !is.na(s2))</code></pre>
+<pre><code>## # A tibble: 7 x 4
+##      x0    x1 s       s2     
+##   &lt;int&gt; &lt;int&gt; &lt;fct&gt;   &lt;fct&gt;  
+## 1     1    11 chitoge kosaki 
+## 2     2    12 marika  chitoge
+## 3     3    13 chitoge kosaki 
+## 4     6    16 chitoge chitoge
+## 5     8    18 marika  chitoge
+## 6     9    19 chitoge kosaki 
+## 7    10    20 marika  kosaki</code></pre>
+<p><code>is.na</code>は「NAか否か」を判定してTRUEあるいはFALSEを返してきます。なのでこの場合s2にNAがあるレコードを抽出してきます。そのため,<code>!is.na(s2)</code>と否定することでs2がNAではないレコードを抽出してくるようになります。</p>
+</div>
+</div>
+</div>
+<div id="データ結合" class="section level1">
+<h1>データ結合</h1>
+<p>データセットを結合する関数として、<code>*_join</code>関数群があります。SQLに慣れている方は、イメージしやすいかと思います。</p>
+<div id="実例-1" class="section level2">
+<h2>実例</h2>
+<p>まず、実例に使うデータセットを準備します:</p>
+<pre class="r"><code>a &lt;- data.frame(x1=c(&quot;A&quot;,&quot;B&quot;,&quot;C&quot;),x2=1:3)
+b &lt;- data.frame(x1=c(&quot;A&quot;,&quot;B&quot;,&quot;D&quot;),x3=c(TRUE, FALSE, TRUE))
+y &lt;- data.frame(x1=c(&quot;A&quot;,&quot;B&quot;,&quot;C&quot;),x2=1:3)
+z &lt;- data.frame(x1=c(&quot;B&quot;,&quot;C&quot;,&quot;D&quot;),x2=2:4)</code></pre>
+<p>aとbを結合する場合、共通する変数はx1ですので、x1をキーにしてmergeします。 yとzを結合する場合、変数は共通です。行を追加してまとめる、あるいは列を追加してまとめます。</p>
+<div id="full_join" class="section level3">
+<h3>full_join</h3>
+<pre class="r"><code>library(dplyr)
+full_join(a, b, by = &quot;x1&quot;)</code></pre>
+<pre><code>## Warning: Column `x1` joining factors with different levels, coercing to
+## character vector</code></pre>
+<pre><code>## # A tibble: 4 x 3
+##   x1       x2 x3   
+##   &lt;chr&gt; &lt;int&gt; &lt;lgl&gt;
+## 1 A         1 TRUE 
+## 2 B         2 FALSE
+## 3 C         3 NA   
+## 4 D        NA TRUE</code></pre>
+<p>全ての行と列を結合します。該当するものがない場合、NAがはいります。また、byでキー変数を指定しますが、変数名は文字列(ダブルクォーテーションで挟む)にしてください。</p>
+</div>
+<div id="inner_join" class="section level3">
+<h3>inner_join</h3>
+<pre class="r"><code>inner_join(a, b, by = &quot;x1&quot;)</code></pre>
+<pre><code>## Warning: Column `x1` joining factors with different levels, coercing to
+## character vector</code></pre>
+<pre><code>## # A tibble: 2 x 3
+##   x1       x2 x3   
+##   &lt;chr&gt; &lt;int&gt; &lt;lgl&gt;
+## 1 A         1 TRUE 
+## 2 B         2 FALSE</code></pre>
+<p>両方のデータセットで、共通して存在するもののみを結合します。</p>
+</div>
+<div id="left_join" class="section level3">
+<h3>left_join</h3>
+<pre class="r"><code>left_join(a, b, by = &quot;x1&quot;)</code></pre>
+<pre><code>## Warning: Column `x1` joining factors with different levels, coercing to
+## character vector</code></pre>
+<pre><code>## # A tibble: 3 x 3
+##   x1       x2 x3   
+##   &lt;chr&gt; &lt;int&gt; &lt;lgl&gt;
+## 1 A         1 TRUE 
+## 2 B         2 FALSE
+## 3 C         3 NA</code></pre>
+<p>左側(第一引数)を優先して結合します。なお右側優先で結合する関数(right_join)もありますが省略します。</p>
+</div>
+<div id="bind_cols" class="section level3">
+<h3>bind_cols</h3>
+<pre class="r"><code>bind_cols(y, z)</code></pre>
+<pre><code>## # A tibble: 3 x 4
+##   x1       x2 x11     x21
+##   &lt;fct&gt; &lt;int&gt; &lt;fct&gt; &lt;int&gt;
+## 1 A         1 B         2
+## 2 B         2 C         3
+## 3 C         3 D         4</code></pre>
+<p>左側のデータセットに右側の列を追加します。同一名の変数がある場合、被らないように修正されます。また、<strong>行数が一致しないとエラーとなります</strong>。</p>
+</div>
+<div id="bind_rows" class="section level3">
+<h3>bind_rows</h3>
+<pre class="r"><code>bind_rows(y, z)</code></pre>
+<pre><code>## Warning in bind_rows_(x, .id): Unequal factor levels: coercing to character</code></pre>
+<pre><code>## Warning in bind_rows_(x, .id): binding character and factor vector,
+## coercing into character vector
+
+## Warning in bind_rows_(x, .id): binding character and factor vector,
+## coercing into character vector</code></pre>
+<pre><code>## # A tibble: 6 x 2
+##   x1       x2
+##   &lt;chr&gt; &lt;int&gt;
+## 1 A         1
+## 2 B         2
+## 3 C         3
+## 4 B         2
+## 5 C         3
+## 6 D         4</code></pre>
+<pre class="r"><code>bind_rows(y, z, .id = &quot;table_id&quot;)</code></pre>
+<pre><code>## Warning in bind_rows_(x, .id): Unequal factor levels: coercing to character
+
+## Warning in bind_rows_(x, .id): binding character and factor vector,
+## coercing into character vector
+
+## Warning in bind_rows_(x, .id): binding character and factor vector,
+## coercing into character vector</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   table_id x1       x2
+##   &lt;chr&gt;    &lt;chr&gt; &lt;int&gt;
+## 1 1        A         1
+## 2 1        B         2
+## 3 1        C         3
+## 4 2        B         2
+## 5 2        C         3
+## 6 2        D         4</code></pre>
+<p>左側のデータセットに右側の行を追加します。列数が一致しないとエラーとなります。また、<strong><code>.id</code>引数を使うと、上述の例のように「どのデータセットから持ってきたか」というのを識別できるような変数を自動で作成</strong>します。</p>
+</div>
+</div>
+</div>
+<div id="新しい変数の生成値の再割り当て" class="section level1">
+<h1>新しい変数の生成・値の再割り当て</h1>
+<p>新たに変数を生成したり、既存の変数に対して値を再割り当てするには、<em>dplyr</em>の<code>mutate</code>関数を使用します。</p>
+<div id="mutate関数とは" class="section level2">
+<h2>mutate関数とは</h2>
+<p>データセットに新たに変数を追加する関数です。また、既存の変数の書き換えも可能です。dplyrパッケージでも高頻度で利用される基本的な関数の一つです。</p>
+<div id="使い方と例" class="section level3">
+<h3>使い方と例</h3>
+<pre class="r"><code>mutate(.data, ...)</code></pre>
+<p>試しに、<code>iris</code>データの<code>Sepal.Length</code>の値を2倍した変数として<code>kosaki</code>という変数を作成してみます:</p>
+<pre class="r"><code>library(dplyr)
+mutate(iris, kosaki = Sepal.Length * 2)</code></pre>
+<pre><code>## # A tibble: 150 x 6
+##    Sepal.Length Sepal.Width Petal.Length Petal.Width Species kosaki
+##           &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt; &lt;fct&gt;    &lt;dbl&gt;
+##  1         5.10        3.50         1.40       0.200 setosa   10.2 
+##  2         4.90        3.00         1.40       0.200 setosa    9.80
+##  3         4.70        3.20         1.30       0.200 setosa    9.40
+##  4         4.60        3.10         1.50       0.200 setosa    9.20
+##  5         5.00        3.60         1.40       0.200 setosa   10.0 
+##  6         5.40        3.90         1.70       0.400 setosa   10.8 
+##  7         4.60        3.40         1.40       0.300 setosa    9.20
+##  8         5.00        3.40         1.50       0.200 setosa   10.0 
+##  9         4.40        2.90         1.40       0.200 setosa    8.80
+## 10         4.90        3.10         1.50       0.100 setosa    9.80
+## # ... with 140 more rows</code></pre>
+<p>このように、引数の<code>...</code>で受け取った内容を評価し、<code>.data</code>で指定したデータセットの最後に追加します。また、<strong>変数名として既存の名前を与えると、その変数が上書きされます</strong>:</p>
+<pre class="r"><code>mutate(iris, Sepal.Length = Sepal.Width * 3)</code></pre>
+<pre><code>## # A tibble: 150 x 5
+##    Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+##           &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt; &lt;fct&gt;  
+##  1        10.5         3.50         1.40       0.200 setosa 
+##  2         9.00        3.00         1.40       0.200 setosa 
+##  3         9.60        3.20         1.30       0.200 setosa 
+##  4         9.30        3.10         1.50       0.200 setosa 
+##  5        10.8         3.60         1.40       0.200 setosa 
+##  6        11.7         3.90         1.70       0.400 setosa 
+##  7        10.2         3.40         1.40       0.300 setosa 
+##  8        10.2         3.40         1.50       0.200 setosa 
+##  9         8.70        2.90         1.40       0.200 setosa 
+## 10         9.30        3.10         1.50       0.100 setosa 
+## # ... with 140 more rows</code></pre>
+</div>
+</div>
+<div id="実例-2" class="section level2">
+<h2>実例</h2>
+<p>単純な加工なら、上記のような計算式を書けばOKです。また、データベース処理としてよく使われる窓(window)関数がありますが、基本的なものはdplyrパッケージに組み込まれています。このwindow関数を含め、いくつかピックアップします。また、説明用に以下のデータセットを使います:</p>
+<pre class="r"><code>df &lt;- data.frame(
+  no = 1:7,
+  x1 = c(sample(1:6), NA),
+  s1 = c(LETTERS[1:4], NA, LETTERS[6:7])
+)
+df</code></pre>
+<pre><code>## # A tibble: 7 x 3
+##      no    x1 s1   
+##   &lt;int&gt; &lt;int&gt; &lt;fct&gt;
+## 1     1     4 A    
+## 2     2     3 B    
+## 3     3     6 C    
+## 4     4     2 D    
+## 5     5     5 &lt;NA&gt; 
+## 6     6     1 F    
+## 7     7    NA G</code></pre>
+<div id="オフセット関数" class="section level3">
+<h3>オフセット関数</h3>
+<p>要するに「*個ずらす」という関数です。差分を出したい時によく使います:</p>
+<pre class="r"><code># 1個ずらした変数を作成
+mutate(df, x2 = lag(x1))</code></pre>
+<pre><code>## # A tibble: 7 x 4
+##      no    x1 s1       x2
+##   &lt;int&gt; &lt;int&gt; &lt;fct&gt; &lt;int&gt;
+## 1     1     4 A        NA
+## 2     2     3 B         4
+## 3     3     6 C         3
+## 4     4     2 D         6
+## 5     5     5 &lt;NA&gt;      2
+## 6     6     1 F         5
+## 7     7    NA G         1</code></pre>
+<pre class="r"><code># 3個ずらした変数を作成
+mutate(df, x2 = lag(x1, 3))</code></pre>
+<pre><code>## # A tibble: 7 x 4
+##      no    x1 s1       x2
+##   &lt;int&gt; &lt;int&gt; &lt;fct&gt; &lt;int&gt;
+## 1     1     4 A        NA
+## 2     2     3 B        NA
+## 3     3     6 C        NA
+## 4     4     2 D         4
+## 5     5     5 &lt;NA&gt;      3
+## 6     6     1 F         6
+## 7     7    NA G         2</code></pre>
+<pre class="r"><code># ずらした空欄に値を指定
+mutate(df, x2 = lag(x1, 2, default = 0))</code></pre>
+<pre><code>## # A tibble: 7 x 4
+##      no    x1 s1       x2
+##   &lt;int&gt; &lt;int&gt; &lt;fct&gt; &lt;int&gt;
+## 1     1     4 A         0
+## 2     2     3 B         0
+## 3     3     6 C         4
+## 4     4     2 D         3
+## 5     5     5 &lt;NA&gt;      6
+## 6     6     1 F         2
+## 7     7    NA G         5</code></pre>
+<p>また、逆に上へずらす関数もあります:</p>
+<pre class="r"><code># 1個ずらした変数を作成
+mutate(df, x2 = lead(x1))</code></pre>
+<pre><code>## # A tibble: 7 x 4
+##      no    x1 s1       x2
+##   &lt;int&gt; &lt;int&gt; &lt;fct&gt; &lt;int&gt;
+## 1     1     4 A         3
+## 2     2     3 B         6
+## 3     3     6 C         2
+## 4     4     2 D         5
+## 5     5     5 &lt;NA&gt;      1
+## 6     6     1 F        NA
+## 7     7    NA G        NA</code></pre>
+<pre class="r"><code># 3個ずらした変数を作成
+mutate(df, x2 = lead(x1, 3))</code></pre>
+<pre><code>## # A tibble: 7 x 4
+##      no    x1 s1       x2
+##   &lt;int&gt; &lt;int&gt; &lt;fct&gt; &lt;int&gt;
+## 1     1     4 A         2
+## 2     2     3 B         5
+## 3     3     6 C         1
+## 4     4     2 D        NA
+## 5     5     5 &lt;NA&gt;     NA
+## 6     6     1 F        NA
+## 7     7    NA G        NA</code></pre>
+<pre class="r"><code># ずらした空欄に値を指定
+mutate(df, x2 = lead(x1, 2, default = 0))</code></pre>
+<pre><code>## # A tibble: 7 x 4
+##      no    x1 s1       x2
+##   &lt;int&gt; &lt;int&gt; &lt;fct&gt; &lt;int&gt;
+## 1     1     4 A         6
+## 2     2     3 B         2
+## 3     3     6 C         5
+## 4     4     2 D         1
+## 5     5     5 &lt;NA&gt;     NA
+## 6     6     1 F         0
+## 7     7    NA G         0</code></pre>
+</div>
+<div id="累積関数" class="section level3">
+<h3>累積関数</h3>
+<p>累積に関するものです:</p>
+<pre class="r"><code># 累積和を計算
+mutate(df, x2 = cumsum(x1))</code></pre>
+<pre><code>## # A tibble: 7 x 4
+##      no    x1 s1       x2
+##   &lt;int&gt; &lt;int&gt; &lt;fct&gt; &lt;int&gt;
+## 1     1     4 A         4
+## 2     2     3 B         7
+## 3     3     6 C        13
+## 4     4     2 D        15
+## 5     5     5 &lt;NA&gt;     20
+## 6     6     1 F        21
+## 7     7    NA G        NA</code></pre>
+<p>NAが入るとNAになるので注意してください。なお累積関数には他にもいろいろありますので、このページ最後の資料をぜひ参照してみてください。</p>
+</div>
+<div id="条件による値指定" class="section level3">
+<h3>条件による値指定</h3>
+<p>dplyrには<code>if_else</code>という関数があり、条件を指定して値を指定していくことができます:</p>
+<pre class="r"><code>mutate(df, x2 = if_else(condition = x1 &gt; 3, true = TRUE, false = FALSE))</code></pre>
+<pre><code>## # A tibble: 7 x 4
+##      no    x1 s1    x2   
+##   &lt;int&gt; &lt;int&gt; &lt;fct&gt; &lt;lgl&gt;
+## 1     1     4 A     TRUE 
+## 2     2     3 B     FALSE
+## 3     3     6 C     TRUE 
+## 4     4     2 D     FALSE
+## 5     5     5 &lt;NA&gt;  TRUE 
+## 6     6     1 F     FALSE
+## 7     7    NA G     NA</code></pre>
+<p>baseにも<code>ifelse()</code>があるのですが、こちらのほうがより厳密で、trueの内容とfalseの内容の処理内容をチェックして、同じ型で同じclassかどうかをみるようです。また、引数に<code>missing</code>があり、欠損値への処理ができるようになっています:</p>
+<pre class="r"><code>mutate(df, x2 = if_else(x1 &gt; 4, &quot;high&quot;, &quot;low&quot;, &quot;&quot;))</code></pre>
+<pre><code>## # A tibble: 7 x 4
+##      no    x1 s1    x2   
+##   &lt;int&gt; &lt;int&gt; &lt;fct&gt; &lt;chr&gt;
+## 1     1     4 A     low  
+## 2     2     3 B     low  
+## 3     3     6 C     high 
+## 4     4     2 D     low  
+## 5     5     5 &lt;NA&gt;  high 
+## 6     6     1 F     low  
+## 7     7    NA G     &quot;&quot;</code></pre>
+</div>
+<div id="条件を指定してna" class="section level3">
+<h3>条件を指定してNA</h3>
+<p>条件に合致した値をNAにします:</p>
+<pre class="r"><code>mutate(df, x2 = na_if(x1, 4))</code></pre>
+<pre><code>## # A tibble: 7 x 4
+##      no    x1 s1       x2
+##   &lt;int&gt; &lt;int&gt; &lt;fct&gt; &lt;int&gt;
+## 1     1     4 A        NA
+## 2     2     3 B         3
+## 3     3     6 C         6
+## 4     4     2 D         2
+## 5     5     5 &lt;NA&gt;      5
+## 6     6     1 F         1
+## 7     7    NA G        NA</code></pre>
+<p>NAにしたい値は単一の値、もしくはデータセットと同一の長さのベクトルを受け付けるので注意してください。</p>
+</div>
+<div id="該当する値の書き換え" class="section level3">
+<h3>該当する値の書き換え</h3>
+<p>該当する値を書き換えます:</p>
+<pre class="r"><code>mutate(df,
+       s2 = recode(s1, A = &quot;kosaki&quot;),
+       s3 = recode(s1, A = &quot;kosaki&quot;, .default = &quot;xxx&quot;),
+       x2 = recode(x1, `5` = 55L, `6` = 66L, .default = x1),
+       x3 = recode(x1, `5` = 55L, `6` = 66L, .default = x1, .missing = -1L))</code></pre>
+<pre><code>## # A tibble: 7 x 7
+##      no    x1 s1    s2     s3        x2    x3
+##   &lt;int&gt; &lt;int&gt; &lt;fct&gt; &lt;fct&gt;  &lt;fct&gt;  &lt;int&gt; &lt;int&gt;
+## 1     1     4 A     kosaki kosaki     4     4
+## 2     2     3 B     B      xxx        3     3
+## 3     3     6 C     C      xxx       66    66
+## 4     4     2 D     D      xxx        2     2
+## 5     5     5 &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;      55    55
+## 6     6     1 F     F      xxx        1     1
+## 7     7    NA G     G      xxx       NA    -1</code></pre>
+<p>出力結果を確認してもらえればわかるかと思います。なお、数値の場合<code>5</code>のようにバッククォートで挟む必要があり、書き換える値で<code>55L</code>としているのは、Rで数値の末尾にLをつけるとそれを数値として扱うようするためです。このようにrecodeは型に対して厳し目になっています。</p>
+</div>
+<div id="複数の条件で場合分け" class="section level3">
+<h3>複数の条件で場合分け</h3>
+<p><code>if_else()</code>の複数ケースで、まとめて処理できます:</p>
+<pre class="r"><code>mutate(df,
+       x2 = case_when(
+         no %% 2 == 0 ~ &quot;Even&quot;,
+         no %% 2 == 1 ~ &quot;Odd&quot;,
+         TRUE ~ as.character(x1)
+       ),
+       x3 = case_when(
+         no &lt;= 3 ~ x1 * -2,
+         between(no, 3, 5) ~ as.numeric(x1),
+         TRUE ~ no ^ 2
+       ),
+       s2 = case_when(
+         s1 == &quot;A&quot; ~ &quot;kosaki&quot;
+       ),
+       s3 = case_when(
+         s1 == &quot;A&quot; ~ &quot;kosaki&quot;,
+         TRUE ~ as.character(s1)
+       ),
+       s4 = case_when(
+         TRUE ~ as.character(s1),
+         s1 == &quot;A&quot; ~ &quot;chitoge&quot;
+       ))</code></pre>
+<pre><code>## # A tibble: 7 x 8
+##      no    x1 s1    x2       x3 s2     s3     s4   
+##   &lt;int&gt; &lt;int&gt; &lt;fct&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;
+## 1     1     4 A     Odd     -8. kosaki kosaki A    
+## 2     2     3 B     Even    -6. &lt;NA&gt;   B      B    
+## 3     3     6 C     Odd    -12. &lt;NA&gt;   C      C    
+## 4     4     2 D     Even     2. &lt;NA&gt;   D      D    
+## 5     5     5 &lt;NA&gt;  Odd      5. &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt; 
+## 6     6     1 F     Even    36. &lt;NA&gt;   F      F    
+## 7     7    NA G     Odd     49. &lt;NA&gt;   G      G</code></pre>
+<p><code>case_when()</code>では複数の条件を指定していくことができ，引数に論理式と置き換える値を記述していきます。この際，<code>~</code>を利用したformulaを使用します。</p>
+<p>また，論理式で拾えなかった要素については全て<code>NA</code>が返ってきます。なお，「それ以外」を指し示すのは<code>TRUE</code>で，上記のように<code>~</code>の左辺に記述すればOKです。</p>
+<p>注意事項ですが，順番が重要で最初に書いてあるものが優先されます。s3とs4のコードと出力を比較してください。</p>
+</div>
+</div>
+</div>
+<div id="データのグループ化と要約統計量" class="section level1">
+<h1>データのグループ化と要約統計量</h1>
+<p>「ある変数の値ごとに処理をして平均や標準偏差を算出したい」という時には、グループ化の処理を行います。ここでは<em>dplyr</em>パッケージの<code>group_by</code>関数を利用します。</p>
+<p>また、集計をするには<em>dplyr</em>パッケージの<code>summarize</code>関数もしくは<code>summarise</code>関数を利用します。</p>
+<div id="実例-3" class="section level2">
+<h2>実例</h2>
+<pre class="r"><code>library(dplyr)
+df &lt;- group_by(iris, Species)
+df</code></pre>
+<pre><code>## # A tibble: 150 x 5
+## # Groups:   Species [3]
+##    Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+##           &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt; &lt;fct&gt;  
+##  1         5.10        3.50         1.40       0.200 setosa 
+##  2         4.90        3.00         1.40       0.200 setosa 
+##  3         4.70        3.20         1.30       0.200 setosa 
+##  4         4.60        3.10         1.50       0.200 setosa 
+##  5         5.00        3.60         1.40       0.200 setosa 
+##  6         5.40        3.90         1.70       0.400 setosa 
+##  7         4.60        3.40         1.40       0.300 setosa 
+##  8         5.00        3.40         1.50       0.200 setosa 
+##  9         4.40        2.90         1.40       0.200 setosa 
+## 10         4.90        3.10         1.50       0.100 setosa 
+## # ... with 140 more rows</code></pre>
+<p>見た目では変化していないように見えますが、これでグループ化されて処理されるようになります:</p>
+<pre class="r"><code>mutate(df, x1 = cumsum(Sepal.Length))</code></pre>
+<pre><code>## # A tibble: 150 x 6
+## # Groups:   Species [3]
+##    Sepal.Length Sepal.Width Petal.Length Petal.Width Species    x1
+##           &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt; &lt;fct&gt;   &lt;dbl&gt;
+##  1         5.10        3.50         1.40       0.200 setosa   5.10
+##  2         4.90        3.00         1.40       0.200 setosa  10.0 
+##  3         4.70        3.20         1.30       0.200 setosa  14.7 
+##  4         4.60        3.10         1.50       0.200 setosa  19.3 
+##  5         5.00        3.60         1.40       0.200 setosa  24.3 
+##  6         5.40        3.90         1.70       0.400 setosa  29.7 
+##  7         4.60        3.40         1.40       0.300 setosa  34.3 
+##  8         5.00        3.40         1.50       0.200 setosa  39.3 
+##  9         4.40        2.90         1.40       0.200 setosa  43.7 
+## 10         4.90        3.10         1.50       0.100 setosa  48.6 
+## # ... with 140 more rows</code></pre>
+<p>また、多くの場合集計に利用します:</p>
+<pre class="r"><code># irisでそのまま集計した場合:
+summarize(iris, n = n(), mean = mean(Sepal.Length), sd = sd(Sepal.Length))</code></pre>
+<pre><code>## # A tibble: 1 x 3
+##       n  mean    sd
+##   &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1   150  5.84 0.828</code></pre>
+<pre class="r"><code># group_byしたあと:
+summarize(df, n = n(), mean = mean(Sepal.Length), sd = sd(Sepal.Length))</code></pre>
+<pre><code>## # A tibble: 3 x 4
+##   Species        n  mean    sd
+##   &lt;fct&gt;      &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1 setosa        50  5.01 0.352
+## 2 versicolor    50  5.94 0.516
+## 3 virginica     50  6.59 0.636</code></pre>
+<p>なお、グループ化を解除するにはungroup関数を使います</p>
+<pre class="r"><code>df2 &lt;- ungroup(df)
+summarize(df2, n = n(), mean = mean(Sepal.Length), sd = sd(Sepal.Length))</code></pre>
+<pre><code>## # A tibble: 1 x 3
+##       n  mean    sd
+##   &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1   150  5.84 0.828</code></pre>
+<p>データセットを縦型(long型)あるいは横型(wide型)へと変換します。tidy dataという考え方がポイントになりますので、このあたりについては一度別資料を探してみてください。</p>
+</div>
+<div id="実例-4" class="section level2">
+<h2>実例</h2>
+<div id="縦型へ変換" class="section level3">
+<h3>縦型へ変換</h3>
+<p>tidyrパッケージのgather関数で行えます:</p>
+<pre class="r"><code>library(tidyr)
+gather(iris, key = hoge, value = fuga, -Species)</code></pre>
+<pre><code>## # A tibble: 600 x 3
+##    Species hoge          fuga
+##    &lt;fct&gt;   &lt;chr&gt;        &lt;dbl&gt;
+##  1 setosa  Sepal.Length  5.10
+##  2 setosa  Sepal.Length  4.90
+##  3 setosa  Sepal.Length  4.70
+##  4 setosa  Sepal.Length  4.60
+##  5 setosa  Sepal.Length  5.00
+##  6 setosa  Sepal.Length  5.40
+##  7 setosa  Sepal.Length  4.60
+##  8 setosa  Sepal.Length  5.00
+##  9 setosa  Sepal.Length  4.40
+## 10 setosa  Sepal.Length  4.90
+## # ... with 590 more rows</code></pre>
+<p>keyには、まとめた時に「この行の値はどの変数に入ってたものか」を示す変数名を指定します。またvalueには、まとめた変数の値が格納されます。その後ろに、まとめ上げる変数群を指定します。ここではdplyr::select()のテクニックがそのまま使えます。</p>
+</div>
+<div id="横型へ変換" class="section level3">
+<h3>横型へ変換</h3>
+<p>tidyrパッケージのspread関数で行えます:</p>
+<pre class="r"><code># irisにidの列を追加して、一旦gatherでまとめます
+library(dplyr)
+df &lt;- mutate(iris, id = rownames(iris))
+df &lt;- gather(df, key = hoge, value = fuga, contains(&quot;l.&quot;))
+head(df)</code></pre>
+<pre><code>## # A tibble: 6 x 4
+##   Species id    hoge          fuga
+## * &lt;fct&gt;   &lt;chr&gt; &lt;chr&gt;        &lt;dbl&gt;
+## 1 setosa  1     Sepal.Length  5.10
+## 2 setosa  2     Sepal.Length  4.90
+## 3 setosa  3     Sepal.Length  4.70
+## 4 setosa  4     Sepal.Length  4.60
+## 5 setosa  5     Sepal.Length  5.00
+## 6 setosa  6     Sepal.Length  5.40</code></pre>
+<pre class="r"><code># これを再度バラします
+spread(df, key = hoge, value = fuga)</code></pre>
+<pre><code>## # A tibble: 150 x 6
+##    Species id    Petal.Length Petal.Width Sepal.Length Sepal.Width
+##    &lt;fct&gt;   &lt;chr&gt;        &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt;
+##  1 setosa  1             1.40       0.200         5.10        3.50
+##  2 setosa  10            1.50       0.100         4.90        3.10
+##  3 setosa  11            1.50       0.200         5.40        3.70
+##  4 setosa  12            1.60       0.200         4.80        3.40
+##  5 setosa  13            1.40       0.100         4.80        3.00
+##  6 setosa  14            1.10       0.100         4.30        3.00
+##  7 setosa  15            1.20       0.200         5.80        4.00
+##  8 setosa  16            1.50       0.400         5.70        4.40
+##  9 setosa  17            1.30       0.400         5.40        3.90
+## 10 setosa  18            1.40       0.300         5.10        3.50
+## # ... with 140 more rows</code></pre>
+<p>このようにgatherとspreadは対応しています。なお、spreadを実行する際、処理後に各レコードが一意に特定できる列(主キーにあたるようなもの)が必要となります。関数の引数で指定する必要はないのですが、これがないと展開してくれずエラーを返すので注意してください。</p>
+</div>
+</div>
+</div>
+<div id="まとめと参考資料" class="section level1">
+<h1>まとめと参考資料</h1>
+</div>
+<div id="session-info" class="section level1">
+<h1>session info</h1>
+<p>このページを実行した環境は以下のとおりです:</p>
 <p>session-info:</p>
 <pre class="r"><code>sessionInfo()</code></pre>
 <pre><code>## R version 3.4.3 (2017-11-30)
@@ -234,11 +1285,18 @@ $(document).ready(function () {
 ## attached base packages:
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
+## other attached packages:
+## [1] tidyr_0.8.0   stringr_1.3.0 bindrcpp_0.2  dplyr_0.7.4  
+## 
 ## loaded via a namespace (and not attached):
-##  [1] compiler_3.4.3  backports_1.1.2 magrittr_1.5    rprojroot_1.3-2
-##  [5] tools_3.4.3     htmltools_0.3.6 yaml_2.1.18     Rcpp_0.12.16   
-##  [9] stringi_1.1.7   rmarkdown_1.9   knitr_1.20      stringr_1.3.0  
-## [13] digest_0.6.15   evaluate_0.10.1</code></pre>
+##  [1] Rcpp_0.12.16     knitr_1.20       bindr_0.1.1      magrittr_1.5    
+##  [5] tidyselect_0.2.4 R6_2.2.2         rlang_0.2.0      tools_3.4.3     
+##  [9] utf8_1.1.3       cli_1.0.0        htmltools_0.3.6  yaml_2.1.18     
+## [13] rprojroot_1.3-2  digest_0.6.15    assertthat_0.2.0 tibble_1.4.2    
+## [17] crayon_1.3.4     purrr_0.2.4      glue_1.2.0       evaluate_0.10.1 
+## [21] rmarkdown_1.9    stringi_1.1.7    compiler_3.4.3   pillar_1.2.1    
+## [25] backports_1.1.2  pkgconfig_2.0.1</code></pre>
+</div>
 
 <footer>
   <p>このWebサイトは2018年3月21日に開催された、日本社会心理学会 第5回春の方法論セミナーで行われた「RとRStudio入門」の公開資料です。</p>
@@ -254,6 +1312,8 @@ $(document).ready(function () {
 </script>
 
 
+</div>
+</div>
 
 </div>
 
