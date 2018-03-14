@@ -376,6 +376,130 @@ div.tocify {
 </div>
 </div>
 </div>
+<div id="rに触れてみよう" class="section level2">
+<h2>Rに触れてみよう</h2>
+<div id="hello-world" class="section level3">
+<h3>Hello, World</h3>
+<p><strong>コンソールの使い方</strong></p>
+<p>以下が「コマンド?」状態:</p>
+<pre><code>&gt;</code></pre>
+<p>試しに以下のコードをコンソールに入力してEnter</p>
+<pre class="r"><code>1+1</code></pre>
+<p>ついでにこれもやってみよう</p>
+<pre class="r"><code>41^2*271^2</code></pre>
+</div>
+<div id="関数を使おう" class="section level3">
+<h3>関数を使おう</h3>
+<p>2の平方根を算出するには?</p>
+<pre class="r"><code>sqrt(2)</code></pre>
+<pre><code>## [1] 1.414214</code></pre>
+<ul>
+<li>関数とは「inputに対して決まった命令を実行してoutput」</li>
+<li>上の場合、<code>2</code>という値を「その平方根を計算」して1.4142136を出す
+<ul>
+<li>この2を<strong>引数(Arguments)</strong>といいます</li>
+<li>そして出てきた結果が<strong>出力(Value)</strong>です</li>
+</ul></li>
+<li>関数は、<strong>関数名(引数, 引数, 引数, …)</strong>という感じで書きます</li>
+</ul>
+</div>
+<div id="オブジェクトを使おう" class="section level3">
+<h3>オブジェクトを使おう</h3>
+<p>Rは数値や文字などを<strong>オブジェクト</strong>という単位で管理</p>
+<pre class="r"><code># 今夜のbeerは500円です
+beer &lt;- 500
+# beerの値段をRに聞いてみる
+beer</code></pre>
+<pre><code>## [1] 500</code></pre>
+<ul>
+<li>この<code>beer</code>がオブジェクトです
+<ul>
+<li>変数に感覚が近いです</li>
+<li>いろんなものを入れて管理できます</li>
+</ul></li>
+</ul>
+</div>
+<div id="オブジェクトに文字列を" class="section level3">
+<h3>オブジェクトに文字列を</h3>
+<pre class="r"><code># 文字列を入れるときは&quot;&quot;で挟む
+drink &lt;- &quot;beer&quot;
+drink</code></pre>
+<pre><code>## [1] &quot;beer&quot;</code></pre>
+<pre class="r"><code># c()関数でまとめて入れることも可能
+drink &lt;- c(&quot;beer&quot;, &quot;sake&quot;, &quot;shochu&quot;)
+drink</code></pre>
+<pre><code>## [1] &quot;beer&quot;   &quot;sake&quot;   &quot;shochu&quot;</code></pre>
+</div>
+<div id="オブジェクトに数値を" class="section level3">
+<h3>オブジェクトに数値を</h3>
+<pre class="r"><code># 数値もまとめて可能
+price &lt;- c(500, 650, 450)
+price</code></pre>
+<pre><code>## [1] 500 650 450</code></pre>
+<pre class="r"><code># こんなこともできます
+seki &lt;- 1:10
+seki</code></pre>
+<pre><code>##  [1]  1  2  3  4  5  6  7  8  9 10</code></pre>
+</div>
+<div id="オブジェクトを操作" class="section level3">
+<h3>オブジェクトを操作</h3>
+<pre class="r"><code># 2つ目の要素にアクセス
+price[2]</code></pre>
+<pre><code>## [1] 650</code></pre>
+<pre class="r"><code># 平均価格を算出しましょう
+mean(price)</code></pre>
+<pre><code>## [1] 533.3333</code></pre>
+<pre class="r"><code># 税込価格を計算しましょう
+price * 1.08</code></pre>
+<pre><code>## [1] 540 702 486</code></pre>
+</div>
+<div id="data.frameとは" class="section level3">
+<h3>data.frameとは</h3>
+<p>簡単に言えばスプレットシートみたいな形のデータ</p>
+<pre class="r"><code>head(iris, 4)</code></pre>
+<pre><code>## # A tibble: 4 x 5
+##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+## *        &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt; &lt;fct&gt;  
+## 1         5.10        3.50         1.40       0.200 setosa 
+## 2         4.90        3.00         1.40       0.200 setosa 
+## 3         4.70        3.20         1.30       0.200 setosa 
+## 4         4.60        3.10         1.50       0.200 setosa</code></pre>
+<ul>
+<li>列が変数、行が1サンプル</li>
+<li>列の長さは全て同じ(矩形)</li>
+<li>扱い方は別途説明</li>
+</ul>
+</div>
+</div>
+<div id="パッケージ" class="section level2">
+<h2>パッケージ</h2>
+<div id="パッケージって何" class="section level3">
+<h3>パッケージって何?</h3>
+<ul>
+<li>すごくざっくり言うと関数とかデータセットとかをまとめたもの
+<ul>
+<li>ツールセットみたいなイメージ</li>
+<li>Rでできることを広げてくれます</li>
+</ul></li>
+<li>現在CRANに登録されているパッケージ数はこれで調べられます:</li>
+</ul>
+<pre class="r"><code>nrow(available.packages())</code></pre>
+</div>
+<div id="パッケージのインストール" class="section level3">
+<h3>パッケージのインストール</h3>
+<p>例として<code>ggplot2</code>を使ってみます</p>
+<pre class="r"><code>install.packages(&quot;ggplot2&quot;)</code></pre>
+<ul>
+<li>これでインストールできます</li>
+<li>たまにエラーを返すことがあります
+<ul>
+<li>多くはパッケージの依存関係が原因です</li>
+<li>OSによって違ったり、そのマシンの環境によっても違ったり…</li>
+<li>難しかったら身近な詳しい人や「Rなんでも相談室」で聞きましょう</li>
+</ul></li>
+</ul>
+</div>
+</div>
 </div>
 <div id="ファイルからデータの読み込み" class="section level1">
 <h1>ファイルからデータの読み込み</h1>
@@ -467,8 +591,8 @@ sav_df &lt;- read_sav(&quot;hoge.sav&quot;)</code></pre>
 <p>このようにRStudioを利用すれば簡単にデータを読みこませることができますが、<strong>極力スクリプトにコードを記述して、データを読みこませる</strong>ようにしてください。この方が「どのデータを読み込んだのか」といったことが明確になり、ファイルを取り違えるといった分析者のミスが減少するからです。</p>
 </div>
 </div>
-<div id="まずはとにかく触ってみよう" class="section level1">
-<h1>まずはとにかく触ってみよう</h1>
+<div id="rで軽く分析をしてみよう" class="section level1">
+<h1>Rで(軽く)分析をしてみよう</h1>
 <p>まず、Rを使うとどんな感じになるのか、試しに触ってみましょう。それぞれの解説については後述します。</p>
 <div id="データ構造を確認" class="section level2">
 <h2>データ構造を確認</h2>
@@ -560,7 +684,7 @@ sav_df &lt;- read_sav(&quot;hoge.sav&quot;)</code></pre>
 ##   4.900   6.225   6.500   6.588   6.900   7.900</code></pre>
 <p>これを箱ひげ図でプロット:</p>
 <pre class="r"><code>plot(iris.data$Species, iris.data$Sepal.Length)</code></pre>
-<p><img src="intro_rstudio_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p><img src="intro_rstudio_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
 </div>
 </div>
 <div id="まとめと参考文献" class="section level1">
