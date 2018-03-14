@@ -1,24 +1,22 @@
 ---
-title: "日本社会心理学会　春の方法論セミナー2018"
+title: "データの可視化"
 date: "`r Sys.Date()`"
 author: "紀ノ定　保礼（静岡理工科大学）"
 output:
-  rmdformats::readthedown:
+  html_document:
     md_extensions: -ascii_identifiers
-    self_contained: true
-    lightbox: true
-    highlight: kate
-    css: styles_customized.css
+    toc: true
+    toc_float: true
+    css: [styles.css, styles_customized.css]
 ---
 
 ```{r knitr_init, echo=FALSE, cache=FALSE}
 library(knitr)
-library(rmdformats)
 
 ## Global options
 options(max.print="75")
 opts_chunk$set(echo=TRUE,
-	             cache=TRUE,
+	             cache=FALSE,
                prompt=FALSE,
                tidy=TRUE,
                comment=NA,
@@ -452,7 +450,7 @@ print(g)
 
 ## グラフを保存する
 publication-readyに仕上げることが出来たら，あとは保存するだけです。RStudioを使用している場合は，GUIで保存を行うことも可能ですが，`ggsave()`という関数を用いるとより詳細な設定が可能になります。
-```{r ggsave}
+```{r ggsave, eval=FALSE}
 g <- ggplot(data = mpg, mapping = aes(x = class, y = displ, fill = class))
 g <- g + theme_bw(base_size = 15, base_family = "serif")
 g <- g + geom_violin()

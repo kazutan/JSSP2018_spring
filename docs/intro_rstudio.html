@@ -23,6 +23,8 @@
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.9.0/css/lightbox.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.9.0/js/lightbox.min.js"></script>
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -180,18 +182,14 @@ $(document).ready(function () {
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="index.html">
-    <span class="fa fa-home"></span>
-     
-  </a>
-</li>
-<li>
   <a href="intro_rstudio.html">RStudio入門</a>
 </li>
 <li>
   <a href="data_handling.html">データ操作</a>
 </li>
-<li class="dropdown-header">ggplot2入門</li>
+<li>
+  <a href="visualization.html">データの可視化</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -219,16 +217,16 @@ $(document).ready(function () {
 <pre class="r"><code>sessionInfo()</code></pre>
 <pre><code>## R version 3.4.3 (2017-11-30)
 ## Platform: x86_64-pc-linux-gnu (64-bit)
-## Running under: Debian GNU/Linux 9 (stretch)
+## Running under: Ubuntu 16.04.4 LTS
 ## 
 ## Matrix products: default
-## BLAS: /usr/lib/openblas-base/libblas.so.3
-## LAPACK: /usr/lib/libopenblasp-r0.2.19.so
+## BLAS: /usr/lib/libblas/libblas.so.3.6.0
+## LAPACK: /usr/lib/lapack/liblapack.so.3.6.0
 ## 
 ## locale:
 ##  [1] LC_CTYPE=ja_JP.UTF-8       LC_NUMERIC=C              
 ##  [3] LC_TIME=ja_JP.UTF-8        LC_COLLATE=ja_JP.UTF-8    
-##  [5] LC_MONETARY=ja_JP.UTF-8    LC_MESSAGES=C             
+##  [5] LC_MONETARY=ja_JP.UTF-8    LC_MESSAGES=ja_JP.UTF-8   
 ##  [7] LC_PAPER=ja_JP.UTF-8       LC_NAME=C                 
 ##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
 ## [11] LC_MEASUREMENT=ja_JP.UTF-8 LC_IDENTIFICATION=C       
@@ -237,15 +235,23 @@ $(document).ready(function () {
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] compiler_3.4.3   backports_1.1.2  magrittr_1.5     rprojroot_1.3-2 
-##  [5] tools_3.4.3      htmltools_0.3.6  yaml_2.1.16      Rcpp_0.12.15    
-##  [9] stringi_1.1.6    rmarkdown_1.8.10 knitr_1.20       stringr_1.3.0   
-## [13] digest_0.6.15    evaluate_0.10.1</code></pre>
+##  [1] compiler_3.4.3  backports_1.1.2 magrittr_1.5    rprojroot_1.3-2
+##  [5] tools_3.4.3     htmltools_0.3.6 yaml_2.1.18     Rcpp_0.12.16   
+##  [9] stringi_1.1.7   rmarkdown_1.9   knitr_1.20      stringr_1.3.0  
+## [13] digest_0.6.15   evaluate_0.10.1</code></pre>
 
 <footer>
   <p>このWebサイトは2018年3月21日に開催された、日本社会心理学会 第5回春の方法論セミナーで行われた「RとRStudio入門」の公開資料です。</p>
   <p>本資料は<a href="https://creativecommons.org/licenses/by/4.0/legalcode.ja">CC-BY</a>にて公開しています。</p>
 </footer>
+
+<script>
+  $(function(){
+    $("img:not(.lb-image)").wrap(function() {
+      return "<a href='" + $(this).attr("src") + "' data-lightbox='" + $(this).attr("scr") + "'></a>";
+    });
+  });
+</script>
 
 
 
