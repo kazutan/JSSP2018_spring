@@ -1,0 +1,16 @@
+#table-of-contents > h2 {
+  background-color: #006400;
+}
+
+#table-of-contents > h2 > a{
+  font-size: large;
+  color: #FFFFFF;
+}
+
+h1, h2, h3, h4{
+  color: #000000;
+}
+
+#content {
+  max-width: 100%;
+}
