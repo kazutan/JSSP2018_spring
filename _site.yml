@@ -1,25 +1,27 @@
-name: "日本社会心理学会 第5回春の方法論セミナー(1) R/RStudio入門"
+name: 日本社会心理学会 第5回春の方法論セミナー(1) R/RStudio入門
 navbar:
-  title: "R/RStudio入門"
+  title: R/RStudio入門
   type: inverse
   left:
-    - icon: fa-home
-      href: index.html
-    - text: "RStudio入門"
-      href: intro_rstudio.html
-    - text: "データ操作"
-      href: data_handling.html
-    - text: "ggplot2入門"
-      href: "#"
+  - text: RStudio入門
+    href: intro_rstudio.html
+  - text: データ操作
+    href: data_handling.html
+  - text: データの可視化
+    href: visualization.html
   right:
-    - icon: fa-github
-      href: https://github.com/kazutan/JSSP2018_spring
+  - icon: fa-github
+    href: https://github.com/kazutan/JSSP2018_spring
 output:
   html_document:
     theme: yeti
     highlight: textmate
     md_extensions: -ascii_identifiers
     include:
+      in_header: include_head.html
       after_body: footer.html
     css: styles.css
-output_dir: "docs"
+    lib_dir: site_libs
+    self_contained: no
+output_dir: docs
+

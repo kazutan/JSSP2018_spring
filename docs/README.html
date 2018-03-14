@@ -22,6 +22,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.9.0/css/lightbox.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.9.0/js/lightbox.min.js"></script>
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -179,18 +181,14 @@ $(document).ready(function () {
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="index.html">
-    <span class="fa fa-home"></span>
-     
-  </a>
-</li>
-<li>
   <a href="intro_rstudio.html">RStudio入門</a>
 </li>
 <li>
   <a href="data_handling.html">データ操作</a>
 </li>
-<li class="dropdown-header">ggplot2入門</li>
+<li>
+  <a href="visualization.html">データの可視化</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -302,6 +300,14 @@ $(document).ready(function () {
   <p>このWebサイトは2018年3月21日に開催された、日本社会心理学会 第5回春の方法論セミナーで行われた「RとRStudio入門」の公開資料です。</p>
   <p>本資料は<a href="https://creativecommons.org/licenses/by/4.0/legalcode.ja">CC-BY</a>にて公開しています。</p>
 </footer>
+
+<script>
+  $(function(){
+    $("img:not(.lb-image)").wrap(function() {
+      return "<a href='" + $(this).attr("src") + "' data-lightbox='" + $(this).attr("scr") + "'></a>";
+    });
+  });
+</script>
 
 
 

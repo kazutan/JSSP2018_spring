@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="紀ノ定　保礼（静岡理工科大学）" />
+
+<meta name="date" content="2018-03-14" />
+
+<title>データの可視化</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/yeti.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.9.0/css/lightbox.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.9.0/js/lightbox.min.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="styles_customized.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 45px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+
+.section h2 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.section h3 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.section h4 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.section h5 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.section h6 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">R/RStudio入門</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="intro_rstudio.html">RStudio入門</a>
+</li>
+<li>
+  <a href="data_handling.html">データ操作</a>
+</li>
+<li>
+  <a href="visualization.html">データの可視化</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/kazutan/JSSP2018_spring">
+    <span class="fa fa-github"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">データの可視化</h1>
+<h4 class="author"><em>紀ノ定　保礼（静岡理工科大学）</em></h4>
+<h4 class="date"><em>2018-03-14</em></h4>
+
+</div>
+
+
+<div id="可視化の重要性" class="section level1">
+<h1>可視化の重要性</h1>
+<p>セミナー当日に，別スライドにて紹介。引用文献は以下の論文。</p>
+<p><a href="http://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.1002128">Weissgerber, T. L., Milic, N. M., Winham, S. J., &amp; Garovic, V. D. (2015). Beyond bar and line graphs: time for a new data presentation paradigm. PLoS biology, 13(4), e1002128</a></p>
+</div>
+<div id="ggplot2による可視化の文法" class="section level1">
+<h1>ggplot2による可視化の文法</h1>
+<div id="初期準備" class="section level2">
+<h2>初期準備</h2>
+<p>まず，<strong>ggplot2パッケージ</strong>をインストールしましょう。 ggplot2は<strong>tidyverse</strong>パッケージに包含されているので，以下のようにtidyverseをインストール・ロードすることをおすすめします。最後に述べますが，<strong>dplyr</strong>や<strong>forcats</strong>等，tidyverseに包含されている他のパッケージと併用したときに，ggplot2の真価は発揮されます。<br />
+もちろん，ggplot2を単体でインストールすることも可能です。</p>
+<pre class="r"><code>install.packages(&quot;tidyverse&quot;)
+library(tidyverse)
+
+# または install.packages(&#39;ggplot2&#39;) library(ggplot2)</code></pre>
+<p>もう一つだけ準備をしましょう。ggplot2は，幾重にも絵具を重ねて最終的に一枚の絵を描く，油絵のような描画システムです。そこで，まずは新品のキャンバスを用意しましょう。以下のコードでは，新品のキャンバスを，<code>g</code>というオブジェクトに格納しています。</p>
+<p><code>print(g)</code>と入力することで，オブジェクトの中身を出力することができます。この時点ではまだ絵の具を使っていないので，キャンバスだけが表示されます。</p>
+<pre class="r"><code>g &lt;- ggplot()
+
+print(g)</code></pre>
+<p><img src="visualization_files/figure-html/ggplot_0-1.png" width="672" /></p>
+</div>
+<div id="幾何学的オブジェクトgeom" class="section level2">
+<h2>幾何学的オブジェクト：geom</h2>
+<p>ではいよいよ可視化に取り掛かりましょう。ここではRに最初から入っている<code>mtcars</code>データセットを用います。このデータセットには，32種類の自動車の性能に関するデータが収められています。各変数の詳細は，Rのコンソールで<code>?mtcars</code>と入力して確認してください。</p>
+<pre class="r"><code>data(mtcars)
+head(x = mtcars, n = 5)  #5行だけ表示</code></pre>
+<pre><code>                   mpg cyl disp  hp drat    wt  qsec vs am gear carb
+Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2</code></pre>
+<p>ggplot2では，データを<strong>幾何学的オブジェクト（geometric object）</strong>に当てはめて可視化します。クッキーを作るために生地を作った時，星や円等の様々な型を押し当てると，その通りの形にくりぬくことが出来るのとと同じように，データを<code>geom_bar()</code>に与えると棒グラフが，<code>geom_point()</code>に与えると散布図が出来上がるわけです。</p>
+<p>代表的なgeomを以下に抜粋しました。これらはほんの一部に過ぎず，ggplot2には非常に多くのgeomが用意されています。詳しくは<a href="http://ggplot2.tidyverse.org/reference/index.html">公式サイト</a>を参照してください。事例もコード付きで紹介されているので，非常に助かります。</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">geom</th>
+<th align="left">可視化される方法</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><code>geom_bar()</code></td>
+<td align="left">棒グラフ</td>
+</tr>
+<tr class="even">
+<td align="left"><code>geom_line()</code></td>
+<td align="left">折れ線グラフ</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>geom_point()</code></td>
+<td align="left">散布図</td>
+</tr>
+</tbody>
+</table>
+<p>では記法を説明します。ここでは排気量<code>disp</code>と車体重量<code>wt</code>の関係を散布図で表します。 最低限必要な記述は以下の二点です。</p>
+<ul>
+<li>どのデータセットを用いるか
+<ul>
+<li><code>data =</code></li>
+</ul></li>
+<li>そのデータセットの中の，どの変数をグラフの要素（例：X軸，Y軸）に割り当てるか（<strong>マッピング</strong>と呼ぶ）
+<ul>
+<li><code>mapping = aes()</code></li>
+</ul></li>
+</ul>
+<p>各geomは独立のレイヤーを構成し，キャンバスの上にgeomを重ねることで，絵が完成します。以下のどちらの記法も可能ですが，今回は後者の記法で説明を行います。</p>
+<pre class="r"><code># 方法1
+g &lt;- ggplot() + geom_point(data = mtcars, mapping = aes(x = disp, y = wt))
+
+# 方法2
+g &lt;- ggplot()
+g &lt;- g + geom_point(data = mtcars, mapping = aes(x = disp, y = wt))
+
+# 出力
+print(g)</code></pre>
+<p><img src="visualization_files/figure-html/vis1-1.png" width="672" /></p>
+<p>レイヤーは幾重にも重ねることが可能です。例えば以下の例では，マニュアル車とオートマ車が別々のデータセットに含まれていますが，散布図のレイヤーを二枚重ねることで，同じ図を描くことが可能です。</p>
+<pre class="r"><code>mtcars_a &lt;- subset(mtcars, am == 0)  #オートマ車
+mtcars_m &lt;- subset(mtcars, am == 1)  #マニュアル車
+
+g &lt;- ggplot()
+g &lt;- g + geom_point(data = mtcars_a, mapping = aes(x = disp, y = wt))
+g &lt;- g + geom_point(data = mtcars_m, mapping = aes(x = disp, y = wt))
+
+print(g)</code></pre>
+<p><img src="visualization_files/figure-html/vis2-1.png" width="672" /></p>
+<p>もちろん異なるgeomを重ねることも可能です。以下の例では，散布図の上に<code>geom_smooth()</code>で近似直線を重ねて描いています。<code>method = &quot;lm&quot;, se = FALSE</code>という引数については後述するので，ここでは気にしないでください。</p>
+<pre class="r"><code>g &lt;- ggplot()
+g &lt;- g + geom_point(data = mtcars, mapping = aes(x = disp, y = wt))
+g &lt;- g + geom_smooth(data = mtcars, mapping = aes(x = disp, y = wt), method = &quot;lm&quot;, 
+    se = FALSE)
+
+print(g)</code></pre>
+<p><img src="visualization_files/figure-html/vis3-1.png" width="672" /></p>
+<div id="コラム" class="section level3">
+<h3>コラム</h3>
+<p>以下のコードは，<code>data = mtcars, mapping = aes(x = disp, y = wt)</code>という部分が複数のレイヤーで共通しているのに，毎回書くのは面倒です。</p>
+<pre class="r"><code>g &lt;- ggplot()
+g &lt;- g + geom_point(data = mtcars, mapping = aes(x = disp, y = wt))
+g &lt;- g + geom_smooth(data = mtcars, mapping = aes(x = disp, y = wt), method = &quot;lm&quot;, 
+    se = FALSE)
+
+print(g)</code></pre>
+<p>新品のキャンバスを用意する関数<code>ggplot()</code>は，初期設定を与えることができます。その設定は各レイヤーに自動で継承されます。したがって上のコードは，以下のように書くことも可能です。</p>
+<pre class="r"><code>g &lt;- ggplot(data = mtcars, mapping = aes(x = disp, y = wt))
+g &lt;- g + geom_point()
+g &lt;- g + geom_smooth(method = &quot;lm&quot;, se = FALSE)
+
+print(g)</code></pre>
+</div>
+</div>
+<div id="水準の識別" class="section level2">
+<h2>水準の識別</h2>
+<p>排気量が大きくなるほど車体重量が重くなる，右肩上がりの傾向が確認されました。さらに他の変数の影響を検証してみましょう。ここではシリンダー数<code>cyl</code>別に，点の色を区別してみます。以下のように，<code>mapping = aes()</code>の中で色<code>colour</code>にマッピングする変数を指定します。</p>
+<pre class="r"><code>g &lt;- ggplot(data = mtcars, mapping = aes(x = disp, y = wt, colour = cyl))
+g &lt;- g + geom_point()
+
+print(g)</code></pre>
+<p><img src="visualization_files/figure-html/levels_1-1.png" width="672" /></p>
+<p>シリンダー数は整数型の変数なので，連続変数とみなされ，色がグラデーションで表現されます。</p>
+<pre class="r"><code>table(mtcars$cyl)</code></pre>
+<pre><code>
+ 4  6  8 
+11  7 14 </code></pre>
+<p>シリンダー数を因子型とみなすと，水準ごとに異なる色が<strong>自動で</strong>割り当てられます。</p>
+<pre class="r"><code>g &lt;- ggplot(data = mtcars, mapping = aes(x = disp, y = wt, colour = factor(cyl)))
+g &lt;- g + geom_point()
+
+print(g)</code></pre>
+<p><img src="visualization_files/figure-html/levels_3-1.png" width="672" /></p>
+<p>この，「自動で」という点がポイントです。ggplot2を使わずに点の色を塗り分けようとすると，各水準の色を自分で指定しなければならないため，水準が増えるほど手間がかかってしまいます。</p>
+<p>これらの見栄えに関わる設定を<strong>エステティック（aesthetic）</strong>と呼びます。他にも以下のようなエステティックがあります。</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">エステティック</th>
+<th align="left">効果</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><code>colour</code></td>
+<td align="left">色（輪郭）</td>
+</tr>
+<tr class="even">
+<td align="left"><code>fill</code></td>
+<td align="left">色（塗りつぶし）</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>size</code></td>
+<td align="left">大きさ</td>
+</tr>
+<tr class="even">
+<td align="left"><code>shape</code></td>
+<td align="left">点の形状</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>linetype</code></td>
+<td align="left">線の種類</td>
+</tr>
+<tr class="even">
+<td align="left"><code>alpha</code></td>
+<td align="left">透過度</td>
+</tr>
+</tbody>
+</table>
+<div id="コラム-1" class="section level3">
+<h3>コラム</h3>
+<p>ここまで，ある変数の値に応じてエステティックを変える方法を説明してきました。しかし，すべての点の大きさを赤色にする，すべての線を破線にするなど，変数の値に<strong>よらずに</strong>エステティックを変えたい場合もあるでしょう。</p>
+<p>そのような場合は以下のように，<code>aes()</code>の<strong>外で</strong>指定を行ってください。変数ならば<code>aes()</code>の中，定数ならば<code>aes()</code>の外，と覚えるとよいでしょう。</p>
+<pre class="r"><code>g &lt;- ggplot(data = mtcars, mapping = aes(x = disp, y = wt))
+g &lt;- g + geom_point(colour = &quot;#800000&quot;, size = 3, shape = 5)
+g &lt;- g + geom_smooth(linetype = &quot;dashed&quot;, method = &quot;lm&quot;, se = FALSE)
+
+print(g)</code></pre>
+<p><img src="visualization_files/figure-html/levels_4-1.png" width="672" /></p>
+</div>
+</div>
+<div id="統計的処理stat" class="section level2">
+<h2>統計的処理：stat</h2>
+<p>ggplot2の優れている点の一つは，描画過程でデータを統計的に処理する方法を指定できる点です。散布図を描く<code>geom_point()</code>の中身を見てみましょう。<code>stat = &quot;identity&quot;</code>という引数がデフォルトで設定されています。</p>
+<pre class="r"><code>geom_point</code></pre>
+<pre><code>function (mapping = NULL, data = NULL, stat = &quot;identity&quot;, position = &quot;identity&quot;, 
+    ..., na.rm = FALSE, show.legend = NA, inherit.aes = TRUE) 
+{
+    layer(data = data, mapping = mapping, stat = stat, geom = GeomPoint, 
+        position = position, show.legend = show.legend, inherit.aes = inherit.aes, 
+        params = list(na.rm = na.rm, ...))
+}
+&lt;environment: namespace:ggplot2&gt;</code></pre>
+<p>読んで字のごとく，値をそのまま表示するということです。<code>mtcars</code>データセットには32個の観測値が格納されているため，32個の点が可視化されることになります。</p>
+<p>では，マニュアル車とオートマ車別に，平均的な燃費<code>mpg</code>を求めて点で表してみましょう。平均値ですから，各水準一つの値が表示されればよいことになります。そこで<code>stat</code>の設定を以下のように変更し，散布図を描く際に，データを要約することを指定します。要約を実現する関数を<code>fun.y =</code>に与えます。今回は平均を返す関数<code>mean</code>を使用します。</p>
+<pre class="r"><code>g &lt;- ggplot(data = mtcars, mapping = aes(x = factor(am), y = mpg))
+g &lt;- g + geom_point(stat = &quot;summary&quot;, fun.y = mean, size = 5)
+
+print(g)</code></pre>
+<p><img src="visualization_files/figure-html/stat_2-1.png" width="672" /></p>
+<p>あるいは，関数を適用して要約することを前提とした，<code>stat_summary()</code>というレイヤーを使用しても，同一のグラフを描くことができます。</p>
+<pre class="r"><code>g &lt;- ggplot(data = mtcars, mapping = aes(x = factor(am), y = mpg))
+g &lt;- g + stat_summary(geom = &quot;point&quot;, fun.y = mean)
+
+print(g)</code></pre>
+</div>
+<div id="位置の指定position" class="section level2">
+<h2>位置の指定：position</h2>
+<p>再度<code>geom_point</code>の中身を見てみると，<code>position = &quot;identity&quot;</code>と設定されていることがわかります。指定されたX軸及びY軸上の位置に表示させる設定を指します。したがって，マニュアル車とオートマ車別に散布図を描くと，以下のようになります。</p>
+<pre class="r"><code>g &lt;- ggplot(data = mtcars, mapping = aes(x = factor(am), y = mpg))
+g &lt;- g + geom_point()
+
+print(g)</code></pre>
+<p><img src="visualization_files/figure-html/position_1-1.png" width="672" /></p>
+<p>点が重なって，何個の点が存在するのかわかりづらいですね。対策の一つは，各点の透過度を変更することです。色の濃い位置には複数の点が重なっていることがわかります。</p>
+<pre class="r"><code>g &lt;- ggplot(data = mtcars, mapping = aes(x = factor(am), y = mpg))
+g &lt;- g + geom_point(alpha = 0.3, size = 5)
+
+print(g)</code></pre>
+<p><img src="visualization_files/figure-html/position_2-1.png" width="672" /></p>
+<p>別の対策として，<code>position = position_jitter()</code>と指定することで，描画位置を上下左右に散らすことができます。この散らばりの程度は，現在のバージョン（2.2.1）ではランダムです。</p>
+<pre class="r"><code>g &lt;- ggplot(data = mtcars, mapping = aes(x = factor(am), y = mpg))
+g &lt;- g + geom_point(position = position_jitter())
+
+print(g)</code></pre>
+<p><img src="visualization_files/figure-html/position_3-1.png" width="672" /></p>
+<p>もし散らす程度を調整したい場合には，以下のように書けば対応できます。<code>height</code>が垂直方向，<code>width</code>が水平方向の散らばりの度合いを意味します。</p>
+<pre class="r"><code>g &lt;- ggplot(data = mtcars, mapping = aes(x = factor(am), y = mpg))
+g &lt;- g + geom_point(position = position_jitter(height = 0, width = 0.2))
+
+print(g)</code></pre>
+<p><img src="visualization_files/figure-html/position_4-1.png" width="672" /></p>
+</div>
+</div>
+<div id="実習" class="section level1">
+<h1>実習</h1>
+<div id="要因計画法に即した可視化" class="section level2">
+<h2>要因計画法に即した可視化</h2>
+<div id="要因計画-方法1" class="section level3">
+<h3>2要因計画-方法1</h3>
+<p>心理学では，要因計画法に基づきデザインされた実験や調査が行われることが多いです。例えば群（統制群，実験群）×運転経験（ペーパードライバー，熟練ドライバー）のデザインであれば，参加者間2要因デザインと呼ばれます。</p>
+<p>エンジンの種類<code>vs</code>とトランスミッション<code>am</code>の組み合わせによる，参加”車”間2要因デザインで，水準の組み合わせごとに重量<code>wt</code>が異なるかどうかを調べてみましょう。各水準におけるデータの分布形状をヴァイオリンプロットで，平均値の位置を点で表してみます。</p>
+<p>2要因計画における可視化の方法の一つは，水準ごとにエステティックを変えることです。恐らく論文などでもこのタイプが最も多いのではないかと思います。</p>
+<pre class="r"><code>g &lt;- ggplot(data = mtcars, mapping = aes(x = factor(am), y = wt, fill = factor(vs), 
+    colour = factor(vs)))
+g &lt;- g + geom_violin(alpha = 0.3)
+g &lt;- g + stat_summary(fun.y = mean, geom = &quot;point&quot;, size = 3)
+
+print(g)</code></pre>
+<p><img src="visualization_files/figure-html/2way_1-1.png" width="672" /></p>
+<p>おや…ヴァイオリンプロットは狙い通りの描画ができましたが，平均値を示す点は縦一列に並べられてしまっています。それもそのはず，<code>geom_point()</code>のデフォルトの設定では，<code>position = &quot;identity&quot;</code>となっていたことを思い出してください。この設定を変える必要がありますね。</p>
+<p>なぜヴァイオリンプロットは水準が重ならず，水平方向に並べられているのでしょうか。<code>geom_violin</code>の中身を見てみましょう。</p>
+<pre class="r"><code>geom_violin</code></pre>
+<pre><code>function (mapping = NULL, data = NULL, stat = &quot;ydensity&quot;, position = &quot;dodge&quot;, 
+    ..., draw_quantiles = NULL, trim = TRUE, scale = &quot;area&quot;, 
+    na.rm = FALSE, show.legend = NA, inherit.aes = TRUE) 
+{
+    layer(data = data, mapping = mapping, stat = stat, geom = GeomViolin, 
+        position = position, show.legend = show.legend, inherit.aes = inherit.aes, 
+        params = list(trim = trim, scale = scale, draw_quantiles = draw_quantiles, 
+            na.rm = na.rm, ...))
+}
+&lt;environment: namespace:ggplot2&gt;</code></pre>
+<p>なるほど，ヴァイオリンプロットのデフォルトの設定では，<code>position = &quot;dodge&quot;</code>となっていました。これを参考に，散布図に関しても同様に設定を変えましょう。ただし少しだけ工夫が必要で，<code>position = &quot;dodge&quot;</code>の正式な書き方である<code>position = position_dodge()</code>を用い，さらに<code>width = 0.9</code>と引数を指定してください。</p>
+<pre class="r"><code>g &lt;- ggplot(data = mtcars, mapping = aes(x = factor(am), y = wt, fill = factor(vs), 
+    colour = factor(vs)))
+g &lt;- g + geom_violin(alpha = 0.3)
+g &lt;- g + stat_summary(fun.y = mean, geom = &quot;point&quot;, size = 3, position = position_dodge(width = 0.9))
+
+print(g)</code></pre>
+<p><img src="visualization_files/figure-html/2way_3-1.png" width="672" /></p>
+</div>
+<div id="要因計画-方法2" class="section level3">
+<h3>2要因計画-方法2</h3>
+<p>もう一つの方法は，水準ごとに個別のキャンバスを用意し，それらを並べることです。この機能を<strong>ファセット（facet）</strong>と呼びます。<code>facet_wrap()</code>と<code>facet_grid()</code>の二種類の関数がありますが，<code>facet_grid()</code>の場合は，各パネルを並べる方向を変えることが出来ます。</p>
+<pre class="r"><code>g &lt;- ggplot(data = mtcars, mapping = aes(x = factor(am), y = wt, fill = factor(vs), 
+    colour = factor(vs)))
+g &lt;- g + geom_violin(alpha = 0.3)
+g &lt;- g + stat_summary(fun.y = mean, geom = &quot;point&quot;, size = 3)
+g &lt;- g + facet_grid(. ~ factor(vs))
+
+print(g)</code></pre>
+<p><img src="visualization_files/figure-html/2way_4-1.png" width="672" /></p>
+<pre class="r"><code>g &lt;- ggplot(data = mtcars, mapping = aes(x = factor(am), y = wt, fill = factor(vs), 
+    colour = factor(vs)))
+g &lt;- g + geom_violin(alpha = 0.3)
+g &lt;- g + stat_summary(fun.y = mean, geom = &quot;point&quot;, size = 3)
+g &lt;- g + facet_grid(factor(vs) ~ .)
+
+print(g)</code></pre>
+<p><img src="visualization_files/figure-html/2way_5-1.png" width="672" /></p>
+</div>
+<div id="要因計画" class="section level3">
+<h3>3要因計画</h3>
+<p>ギア数<code>gear</code>を要因に追加した，参加“車”間3要因デザインを考えます。 方法の一つは，<strong>2要因計画―方法1</strong>で紹介した記法に，<strong>2要因計画―方法2</strong>で紹介した<code>facet</code>を追加することです。</p>
+<p>もう一つの方法は，facetには最大二つまで変数を指定できる点を利用することです。その組み合わせで個別のパネルを用意することが出来ます。<code>facet_wrap()</code>であれば入れ子構造に，<code>facet_grid()</code>であれば行列の形式で，パネルが並べられます。</p>
+<p>データの総数が少ないため，組み合わせが存在していないところもありますが，一応狙い通りのプロットが出来ました。</p>
+<pre class="r"><code>g &lt;- ggplot(data = mtcars, mapping = aes(x = factor(am), y = wt, fill = factor(vs), 
+    colour = factor(vs)))
+g &lt;- g + geom_violin(alpha = 0.3)
+g &lt;- g + stat_summary(fun.y = mean, geom = &quot;point&quot;, size = 3, position = position_dodge(width = 0.9))
+g &lt;- g + facet_wrap(factor(vs) ~ factor(gear))
+
+print(g)</code></pre>
+<p><img src="visualization_files/figure-html/3way_2-1.png" width="672" /></p>
+<pre class="r"><code>g &lt;- ggplot(data = mtcars, mapping = aes(x = factor(am), y = wt, fill = factor(vs), 
+    colour = factor(vs)))
+g &lt;- g + geom_violin(alpha = 0.3)
+g &lt;- g + stat_summary(fun.y = mean, geom = &quot;point&quot;, size = 3, position = position_dodge(width = 0.9))
+g &lt;- g + facet_grid(factor(vs) ~ factor(gear))
+
+print(g)</code></pre>
+<p><img src="visualization_files/figure-html/3way_3-1.png" width="672" /></p>
+</div>
+</div>
+<div id="一般線形モデルに即した可視化" class="section level2">
+<h2>一般線形モデルに即した可視化</h2>
+<p>いわゆる単回帰分析に対応した書き方については，すでに冒頭で説明しています。</p>
+<pre class="r"><code>g &lt;- ggplot(data = mtcars, mapping = aes(x = disp, y = wt))
+g &lt;- g + geom_point()
+g &lt;- g + geom_smooth(method = &quot;lm&quot;, se = FALSE)
+
+print(g)</code></pre>
+<p>説明を省略した点を補足すると，<code>geom_smooth()</code>は近似<strong>直線</strong>を追加するのではなく，任意の関数で平滑化する関数です。<code>geom_smooth()</code>の中身を見てみましょう。</p>
+<pre class="r"><code>geom_smooth</code></pre>
+<pre><code>function (mapping = NULL, data = NULL, stat = &quot;smooth&quot;, position = &quot;identity&quot;, 
+    ..., method = &quot;auto&quot;, formula = y ~ x, se = TRUE, na.rm = FALSE, 
+    show.legend = NA, inherit.aes = TRUE) 
+{
+    params &lt;- list(na.rm = na.rm, ...)
+    if (identical(stat, &quot;smooth&quot;)) {
+        params$method &lt;- method
+        params$formula &lt;- formula
+        params$se &lt;- se
+    }
+    layer(data = data, mapping = mapping, stat = stat, geom = GeomSmooth, 
+        position = position, show.legend = show.legend, inherit.aes = inherit.aes, 
+        params = params)
+}
+&lt;environment: namespace:ggplot2&gt;</code></pre>
+<p><code>formula = y ~ x</code>，すなわちyをxで予測する関数が与えられていることがわかります。これは，Rで回帰分析を行う際の記法と同じです。</p>
+<pre class="r"><code>fit &lt;- lm(wt ~ disp, data = mtcars)
+summary(fit)</code></pre>
+<pre><code>
+Call:
+lm(formula = wt ~ disp, data = mtcars)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.89044 -0.29775 -0.00684  0.33428  0.66525 
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 1.5998146  0.1729964   9.248 2.74e-10 ***
+disp        0.0070103  0.0006629  10.576 1.22e-11 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 0.4574 on 30 degrees of freedom
+Multiple R-squared:  0.7885,    Adjusted R-squared:  0.7815 
+F-statistic: 111.8 on 1 and 30 DF,  p-value: 1.222e-11</code></pre>
+<p>デフォルトでは<code>method = &quot;auto&quot;</code>となっていますが，<code>method = &quot;lm&quot;</code>と変更することで，直線で回帰することを明示しています。</p>
+<p>さらに，<code>geom_smooth()</code>はデフォルトで<code>se = TRUE</code>の設定を取っており，関数を重ねて描いた際に，信頼区間が表示されます。この点もggplot2の優れた点の一つです。</p>
+<pre class="r"><code>g &lt;- ggplot(data = mtcars, mapping = aes(x = disp, y = wt))
+g &lt;- g + geom_point()
+g &lt;- g + geom_smooth(method = &quot;lm&quot;)
+
+print(g)</code></pre>
+<p><img src="visualization_files/figure-html/lm4-1.png" width="672" /></p>
+</div>
+<div id="一般化線形モデルに即した可視化" class="section level2">
+<h2>一般化線形モデルに即した可視化</h2>
+<p>正規分布以外の確率分布も適用できるように拡張されたモデルが一般化線形モデルです。心理学ではロジスティック回帰分析がよく登場すると思います。例えばマニュアル車かオートマ車かを，車体重量で予測してみると，下図のように（逆）S字のような曲線になります。</p>
+<p>一般化線形モデル（Generalized Linear Model）を適用することを<code>method = &quot;glm&quot;</code>で宣言し，どの確率分布を適用するかを引数<code>method.args</code>に与えます。ロジスティック回帰分析の場合は，説明変数の線形結合をロジスティック関数で確率に変換し，その確率をパラメータとする二項分布に従い目的変数が生成されると考えます。<code>family = &quot;binomial&quot;</code>がそれを表します。</p>
+<pre class="r"><code>g &lt;- ggplot(data = mtcars, mapping = aes(x = wt, y = am))
+g &lt;- g + geom_point()
+g &lt;- g + geom_smooth(method = &quot;glm&quot;, method.args = list(family = binomial(link = &quot;logit&quot;)), 
+    se = FALSE)
+
+print(g)</code></pre>
+<p><img src="visualization_files/figure-html/glm1-1.png" width="672" /></p>
+<p>ロジスティック回帰分析を行う場合と同様ですね。</p>
+<pre class="r"><code>fit &lt;- glm(am ~ wt, family = binomial(link = &quot;logit&quot;), data = mtcars)
+summary(fit)</code></pre>
+<pre><code>
+Call:
+glm(formula = am ~ wt, family = binomial(link = &quot;logit&quot;), data = mtcars)
+
+Deviance Residuals: 
+     Min        1Q    Median        3Q       Max  
+-2.11400  -0.53738  -0.08811   0.26055   2.19931  
+
+Coefficients:
+            Estimate Std. Error z value Pr(&gt;|z|)   
+(Intercept)   12.040      4.510   2.670  0.00759 **
+wt            -4.024      1.436  -2.801  0.00509 **
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 43.230  on 31  degrees of freedom
+Residual deviance: 19.176  on 30  degrees of freedom
+AIC: 23.176
+
+Number of Fisher Scoring iterations: 6</code></pre>
+</div>
+<div id="階層線形モデルに即した可視化" class="section level2">
+<h2>階層線形モデルに即した可視化</h2>
+<p>階層線形モデル（あるいは線形混合モデル，マルチレベル分析）では，観測がいくつかのグループに分かれており，グループごとに回帰（直・曲）線の切片や傾きが異なると想定します。</p>
+<p>このようなモデルを可視化する方法はいくつかありますが，一つの方法は各グループの振る舞いを示してやることでしょう。ggplot2パッケージに内包されている，<code>mpg</code>データセットを用いて説明します。<code>mpg</code>もこれまで紹介してきた<code>mtcars</code>データセットと同様に，様々な車の性能に関するデータを表しています。</p>
+<pre class="r"><code>data(mpg)
+mpg</code></pre>
+<pre><code># A tibble: 234 x 11
+   manufacturer model    displ  year   cyl trans   drv     cty   hwy fl   
+   &lt;chr&gt;        &lt;chr&gt;    &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;   &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;
+ 1 audi         a4        1.80  1999     4 auto(l… f        18    29 p    
+ 2 audi         a4        1.80  1999     4 manual… f        21    29 p    
+ 3 audi         a4        2.00  2008     4 manual… f        20    31 p    
+ 4 audi         a4        2.00  2008     4 auto(a… f        21    30 p    
+ 5 audi         a4        2.80  1999     6 auto(l… f        16    26 p    
+ 6 audi         a4        2.80  1999     6 manual… f        18    26 p    
+ 7 audi         a4        3.10  2008     6 auto(a… f        18    27 p    
+ 8 audi         a4 quat…  1.80  1999     4 manual… 4        18    26 p    
+ 9 audi         a4 quat…  1.80  1999     4 auto(l… 4        16    25 p    
+10 audi         a4 quat…  2.00  2008     4 manual… 4        20    28 p    
+# ... with 224 more rows, and 1 more variable: class &lt;chr&gt;</code></pre>
+<p>以下の例では，エンジンの大きさ<code>displ</code>と市街地における燃費<code>cty</code>の関係を散布図で表しています。また，全観測に共通する回帰直線を，黒色の破線で示しています。さらに，<code>mpg</code>データセットには15社のデータが混在しているため，会社<code>manufacturer</code>ごとに回帰直線を描いています。</p>
+<pre class="r"><code>g &lt;- ggplot(data = mpg, mapping = aes(x = displ, y = cty))
+g &lt;- g + geom_point()
+g &lt;- g + geom_smooth(method = &quot;lm&quot;, se = FALSE, colour = &quot;black&quot;, linetype = &quot;dashed&quot;)
+g &lt;- g + geom_smooth(method = &quot;lm&quot;, se = FALSE, mapping = aes(colour = manufacturer))
+
+print(g)</code></pre>
+<p><img src="visualization_files/figure-html/mixed2-1.png" width="672" /></p>
+</div>
+</div>
+<div id="publication-readyに整える" class="section level1">
+<h1>Publication-readyに整える</h1>
+<p>ここまで，ggplot2の基本的な使い方を説明してきました。ggplot2を用いると，手軽に美しいグラフを出力することができるため，プレゼンテーション資料などに向いているのではないかと思います。しかし，投稿論文や講義資料などでは，モノクロやグレースケールの図を用意したいことも多いでしょう。最後に，publication-readyに仕上げる方法を解説します。</p>
+<div id="色の変更" class="section level2">
+<h2>色の変更</h2>
+<p>引き続き<code>mpg</code>データセットを用いて説明を行います。車種<code>class</code>とエンジンの大きさ<code>displ</code>の関係を，ヴァイオリンプロットで可視化してみます。</p>
+<pre class="r"><code>g &lt;- ggplot(data = mpg, mapping = aes(x = class, y = displ, fill = class))
+g &lt;- g + geom_violin()
+
+print(g)</code></pre>
+<p><img src="visualization_files/figure-html/color1-1.png" width="672" /></p>
+<p>なぜggplot2では自動的に配色されるのかというと，あらかじめ様々な色の絵の具が並べられた「絵の具セット」が用意されているからです（<strong>パレットと呼びます</strong>）。したがって，<code>scale_fill_brewer()</code>や<code>scale_colour_brewer()</code>のなかで絵の具セットを交換することで，別の配色を割り当てることが出来ます。</p>
+<p>例えば<strong>Spectral</strong>というパレットを選択すると，以下のように全水準の配色が変化します。</p>
+<pre class="r"><code>g &lt;- ggplot(data = mpg, mapping = aes(x = class, y = displ, fill = class))
+g &lt;- g + geom_violin()
+g &lt;- g + scale_fill_brewer(palette = &quot;Spectral&quot;)
+
+print(g)</code></pre>
+<p><img src="visualization_files/figure-html/color2-1.png" width="672" /></p>
+<p>グレースケールに対応したパレットは，<strong>Greys</strong>です。</p>
+<pre class="r"><code>g &lt;- ggplot(data = mpg, mapping = aes(x = class, y = displ, fill = class))
+g &lt;- g + geom_violin()
+g &lt;- g + scale_fill_brewer(palette = &quot;Greys&quot;)
+
+print(g)</code></pre>
+<p><img src="visualization_files/figure-html/color3-1.png" width="672" /></p>
+</div>
+<div id="themeの変更" class="section level2">
+<h2>themeの変更</h2>
+<p>ggplot2のデフォルトの設定では，背景の色は灰色になっています。これは<code>theme_grey()</code>という設定がデフォルトで与えられているためです。しかし<a href="https://psych.or.jp/publication/inst/">日本心理学会の執筆・投稿の手引き</a>に記載されているグラフの例を見ると，背景は白色となっています。このような設定に変更するためには，<code>theme_classic()</code>や<code>theme_bw()</code>が適しています。</p>
+<p><code>theme_classic()</code>は以下の通りです。なお各themeを選択する際に，フォントやフォントサイズを変更することも可能です。</p>
+<pre class="r"><code>g &lt;- ggplot(data = mpg, mapping = aes(x = class, y = displ, fill = class))
+g &lt;- g + theme_classic(base_size = 15, base_family = &quot;serif&quot;)
+g &lt;- g + geom_violin()
+g &lt;- g + scale_fill_brewer(palette = &quot;Greys&quot;)
+
+print(g)</code></pre>
+<p><img src="visualization_files/figure-html/theme1-1.png" width="672" /></p>
+<p><code>theme_bw()</code>は以下の通りです。</p>
+<pre class="r"><code>g &lt;- ggplot(data = mpg, mapping = aes(x = class, y = displ, fill = class))
+g &lt;- g + theme_bw(base_size = 15, base_family = &quot;serif&quot;)
+g &lt;- g + geom_violin()
+g &lt;- g + scale_fill_brewer(palette = &quot;Greys&quot;)
+
+print(g)</code></pre>
+<p><img src="visualization_files/figure-html/theme2-1.png" width="672" /></p>
+</div>
+<div id="グラフを保存する" class="section level2">
+<h2>グラフを保存する</h2>
+<p>publication-readyに仕上げることが出来たら，あとは保存するだけです。RStudioを使用している場合は，GUIで保存を行うことも可能ですが，<code>ggsave()</code>という関数を用いるとより詳細な設定が可能になります。</p>
+<pre class="r"><code>g &lt;- ggplot(data = mpg, mapping = aes(x = class, y = displ, fill = class))
+g &lt;- g + theme_bw(base_size = 15, base_family = &quot;serif&quot;)
+g &lt;- g + geom_violin()
+g &lt;- g + scale_fill_brewer(palette = &quot;Greys&quot;)
+
+
+ggsave(plot = g, filename = &quot;JSSP_spring_seminar.png&quot;, dpi = 300, width = 30, 
+    height = 20, units = &quot;cm&quot;)</code></pre>
+</div>
+</div>
+<div id="まとめと参考文献" class="section level1">
+<h1>まとめと参考文献</h1>
+<p>ggplot2の基本的な使い方に関する説明は以上です。しかし，ここで紹介した機能はほんの一部にすぎません。ggplot2には，可視化の効率を高めてくれる，非常に多くの機能が備わっています。<a href="http://ggplot2.tidyverse.org/reference/index.html">公式サイト</a>を参考に，ぜひ隅々までggplot2を堪能してください。</p>
+<p>日本語の書籍では，<a href="https://www.oreilly.co.jp/books/9784873116532/">Rグラフィックスクックブック ――ggplot2によるグラフ作成のレシピ集</a>がおすすめです。ggplot2の機能が網羅的に解説されています。</p>
+<p>あるいは，ggplot2の作者であるHadley Wickham氏が執筆した<a href="http://shop.oreilly.com/product/0636920034407.do">R for Data Science</a>，及びその訳書である<a href="https://www.oreilly.co.jp/books/9784873118147/">Rではじめるデータサイエンス</a>も良いでしょう。こちらは，ggplot2を含むtidyverseパッケージ群に関して解説されています。</p>
+<p>冒頭でも述べた通り，ggplot2の機能は，tidyverseに含まれる他のパッケージと併用したときに真価を発揮します。例えば，これまで作成したグラフを見返してみると，X軸の水準が自動的に数字やアルファベットの順に並び替えられていることがわかるでしょう。任意の順番に並び替えるためには，tidyverseに含まれる<strong>forcatsパッケージ</strong>を併用することが有用です。ggplot2だけでなく，様々なパッケージを使いこなして，可視化をお楽しみください。</p>
+<p>最後に，ggplot2の機能の一部をGUIで実行することができる，<a href="https://cran.r-project.org/web/packages/ggplotgui/README.html"><strong>ggplotguiパッケージ</strong></a>を紹介します。このパッケージを用いると，自分でコードを書くことなくボタン操作で可視化を遂行できるばかりか，コード自体も出力されるため，出力を再現することが可能です。</p>
+<p>Enjoy ggplot2!</p>
+</div>
+
+<footer>
+  <p>このWebサイトは2018年3月21日に開催された、日本社会心理学会 第5回春の方法論セミナーで行われた「RとRStudio入門」の公開資料です。</p>
+  <p>本資料は<a href="https://creativecommons.org/licenses/by/4.0/legalcode.ja">CC-BY</a>にて公開しています。</p>
+</footer>
+
+<script>
+  $(function(){
+    $("img:not(.lb-image)").wrap(function() {
+      return "<a href='" + $(this).attr("src") + "' data-lightbox='" + $(this).attr("scr") + "'></a>";
+    });
+  });
+</script>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
