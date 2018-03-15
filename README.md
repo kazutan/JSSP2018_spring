@@ -3,7 +3,7 @@
 Webページにつきましては、[こちらのリンク先](https://kazutan.github.io/JSSP2018_spring)をご参照ください。
 
 # JSSP2018_spring
-日本社会心理学会 第５回 春の方法論セミナー のセミナー2　「RとRStudio入門(仮)」用のリポジトリ。
+日本社会心理学会 第５回 春の方法論セミナー のセミナー2　「R/RStudio入門」用のリポジトリ。
 
 # RとRstudio入門
 
