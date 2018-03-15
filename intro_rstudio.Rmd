@@ -373,7 +373,8 @@ plot(iris.data$Species, iris.data$Sepal.Length)
 
 # session info
 
-このサイトは次の環境で構成されました。
+このページを実行した環境は以下のとおりです:
+
 ```{r, child="_session_info.Rmd"}
 
 ```
