@@ -65,9 +65,10 @@ R/RStudioはフリーソフトウェアです。
 
 ### 質疑応答あるいはよくある質問と答え
 
++ インストールの際，Core Files,32bit,64bit,Message transration，どれにチェックして入ればいいですか？
+  + よくわからなければ「全て選択」かデフォルトのまま「次へ」を連打してください。
 + Macなのですが，plotやggplot2で日本語文字が化けます
   + plotであれば `par(family="HiraKakuProN-W3")` の1行を実行してください(日本語のフォントファミリを指定します)
   + ggplot2であれば，`old = theme_set(theme_gray(base_family="HiraKakuProN-W3"))` の1行を実行してください(日本語のフォントファミリをテーマとして指定します)
-+ 
 
 
