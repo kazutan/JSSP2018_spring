@@ -11,7 +11,7 @@
 
 <meta name="author" content="紀ノ定　保礼（静岡理工科大学）" />
 
-<meta name="date" content="2018-03-14" />
+<meta name="date" content="2018-03-15" />
 
 <title>データの可視化</title>
 
@@ -310,15 +310,19 @@ div.tocify {
 
 <h1 class="title toc-ignore">データの可視化</h1>
 <h4 class="author"><em>紀ノ定　保礼（静岡理工科大学）</em></h4>
-<h4 class="date"><em>2018-03-14</em></h4>
+<h4 class="date"><em>2018-03-15</em></h4>
 
 </div>
 
 
 <div id="可視化の重要性" class="section level1">
 <h1>可視化の重要性</h1>
-<p>セミナー当日に，別スライドにて紹介。引用文献は以下の論文。</p>
-<p><a href="http://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.1002128">Weissgerber, T. L., Milic, N. M., Winham, S. J., &amp; Garovic, V. D. (2015). Beyond bar and line graphs: time for a new data presentation paradigm. PLoS biology, 13(4), e1002128</a></p>
+<p>セミナー当日に，別スライドにて紹介。主な引用文献は以下。</p>
+<ul>
+<li><a href="http://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.1002128">Weissgerber, T. L., Milic, N. M., Winham, S. J., &amp; Garovic, V. D. (2015). Beyond bar and line graphs: time for a new data presentation paradigm. PLoS biology, 13(4), e1002128</a></li>
+<li><a href="http://www.thefunctionalart.com/2016/08/download-datasaurus-never-trust-summary.html">Download the Datasaurus: Never trust summary statistics alone; always visualize your data</a></li>
+<li><a href="https://www.autodeskresearch.com/publications/samestats">Same Stats, Different Graphs: Generating Datasets with Varied Appearance and Identical Statistics through Simulated Annealing</a></li>
+</ul>
 </div>
 <div id="ggplot2による可視化の文法" class="section level1">
 <h1>ggplot2による可視化の文法</h1>
@@ -327,9 +331,7 @@ div.tocify {
 <p>まず，<strong>ggplot2パッケージ</strong>をインストールしましょう。 ggplot2は<strong>tidyverse</strong>パッケージに包含されているので，以下のようにtidyverseをインストール・ロードすることをおすすめします。最後に述べますが，<strong>dplyr</strong>や<strong>forcats</strong>等，tidyverseに包含されている他のパッケージと併用したときに，ggplot2の真価は発揮されます。<br />
 もちろん，ggplot2を単体でインストールすることも可能です。</p>
 <pre class="r"><code>install.packages(&quot;tidyverse&quot;)
-library(tidyverse)
-
-# または install.packages(&#39;ggplot2&#39;) library(ggplot2)</code></pre>
+library(tidyverse)</code></pre>
 <p>もう一つだけ準備をしましょう。ggplot2は，幾重にも絵具を重ねて最終的に一枚の絵を描く，油絵のような描画システムです。そこで，まずは新品のキャンバスを用意しましょう。以下のコードでは，新品のキャンバスを，<code>g</code>というオブジェクトに格納しています。</p>
 <p><code>print(g)</code>と入力することで，オブジェクトの中身を出力することができます。この時点ではまだ絵の具を使っていないので，キャンバスだけが表示されます。</p>
 <pre class="r"><code>g &lt;- ggplot()
@@ -371,6 +373,14 @@ head(x = mtcars, n = 5)  #5行だけ表示</code></pre>
 <tr class="odd">
 <td align="left"><code>geom_point()</code></td>
 <td align="left">散布図</td>
+</tr>
+<tr class="even">
+<td align="left"><code>geom_boxplot()</code></td>
+<td align="left">箱ひげ図　　</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>geom_errorbar()</code></td>
+<td align="left">誤差棒</td>
 </tr>
 </tbody>
 </table>
