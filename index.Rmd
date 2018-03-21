@@ -32,6 +32,11 @@ R/RStudioはフリーソフトウェアです。
 	+ Free Editionで構いません。
 	+ RStudioの最新バージョンは1.1.419です。(2018/2/3現在)
 	
+
++ tidyverseパッケージをインストールしてください。
+  + `install.packages("tidyverse")`と打ち込んで実行してください。
+  + RStudioのパッケージ管理ボタンから進んでもいいでしょう。
+	
 ## Menu
 
 ### Part I RStudioの基本操作
