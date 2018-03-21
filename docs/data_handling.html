@@ -587,102 +587,102 @@ df</code></pre>
 <pre><code>## # A tibble: 10 x 4
 ##       x0    x1 s       s2     
 ##  * &lt;int&gt; &lt;int&gt; &lt;fct&gt;   &lt;fct&gt;  
-##  1     1    11 chitoge &lt;NA&gt;   
-##  2     2    12 marika  &lt;NA&gt;   
-##  3     3    13 marika  chitoge
-##  4     4    14 marika  chitoge
+##  1     1    11 marika  &lt;NA&gt;   
+##  2     2    12 kosaki  chitoge
+##  3     3    13 kosaki  kosaki 
+##  4     4    14 chitoge kosaki 
 ##  5     5    15 marika  kosaki 
-##  6     6    16 kosaki  chitoge
-##  7     7    17 marika  kosaki 
-##  8     8    18 chitoge chitoge
-##  9     9    19 chitoge chitoge
-## 10    10    20 chitoge kosaki</code></pre>
+##  6     6    16 kosaki  &lt;NA&gt;   
+##  7     7    17 chitoge chitoge
+##  8     8    18 kosaki  kosaki 
+##  9     9    19 kosaki  chitoge
+## 10    10    20 marika  kosaki</code></pre>
 <div id="数値フィルタ" class="section level3">
 <h3>数値フィルタ</h3>
 <p>まずは単一条件についてです:</p>
 <pre class="r"><code># 「*に等しい」
 filter(df, x0 == 4)</code></pre>
 <pre><code>## # A tibble: 1 x 4
-##      x0    x1 s      s2     
-##   &lt;int&gt; &lt;int&gt; &lt;fct&gt;  &lt;fct&gt;  
-## 1     4    14 marika chitoge</code></pre>
+##      x0    x1 s       s2    
+##   &lt;int&gt; &lt;int&gt; &lt;fct&gt;   &lt;fct&gt; 
+## 1     4    14 chitoge kosaki</code></pre>
 <pre class="r"><code># 「*と等しくない」
 filter(df, x0 != 4)</code></pre>
 <pre><code>## # A tibble: 9 x 4
 ##      x0    x1 s       s2     
 ##   &lt;int&gt; &lt;int&gt; &lt;fct&gt;   &lt;fct&gt;  
-## 1     1    11 chitoge &lt;NA&gt;   
-## 2     2    12 marika  &lt;NA&gt;   
-## 3     3    13 marika  chitoge
+## 1     1    11 marika  &lt;NA&gt;   
+## 2     2    12 kosaki  chitoge
+## 3     3    13 kosaki  kosaki 
 ## 4     5    15 marika  kosaki 
-## 5     6    16 kosaki  chitoge
-## 6     7    17 marika  kosaki 
-## 7     8    18 chitoge chitoge
-## 8     9    19 chitoge chitoge
-## 9    10    20 chitoge kosaki</code></pre>
+## 5     6    16 kosaki  &lt;NA&gt;   
+## 6     7    17 chitoge chitoge
+## 7     8    18 kosaki  kosaki 
+## 8     9    19 kosaki  chitoge
+## 9    10    20 marika  kosaki</code></pre>
 <pre class="r"><code># 「*より小さい」
 filter(df, x0 &lt; 4)</code></pre>
 <pre><code>## # A tibble: 3 x 4
-##      x0    x1 s       s2     
-##   &lt;int&gt; &lt;int&gt; &lt;fct&gt;   &lt;fct&gt;  
-## 1     1    11 chitoge &lt;NA&gt;   
-## 2     2    12 marika  &lt;NA&gt;   
-## 3     3    13 marika  chitoge</code></pre>
+##      x0    x1 s      s2     
+##   &lt;int&gt; &lt;int&gt; &lt;fct&gt;  &lt;fct&gt;  
+## 1     1    11 marika &lt;NA&gt;   
+## 2     2    12 kosaki chitoge
+## 3     3    13 kosaki kosaki</code></pre>
 <pre class="r"><code># 「*以上」
 filter(df, x0 &gt;= 4)</code></pre>
 <pre><code>## # A tibble: 7 x 4
 ##      x0    x1 s       s2     
 ##   &lt;int&gt; &lt;int&gt; &lt;fct&gt;   &lt;fct&gt;  
-## 1     4    14 marika  chitoge
+## 1     4    14 chitoge kosaki 
 ## 2     5    15 marika  kosaki 
-## 3     6    16 kosaki  chitoge
-## 4     7    17 marika  kosaki 
-## 5     8    18 chitoge chitoge
-## 6     9    19 chitoge chitoge
-## 7    10    20 chitoge kosaki</code></pre>
+## 3     6    16 kosaki  &lt;NA&gt;   
+## 4     7    17 chitoge chitoge
+## 5     8    18 kosaki  kosaki 
+## 6     9    19 kosaki  chitoge
+## 7    10    20 marika  kosaki</code></pre>
 <p>このあたりは出力と比較すればすぐにわかると思います。</p>
 <p>次に複数条件についてです:</p>
 <pre class="r"><code># 「AかつB」(AND)
 filter(df, x0 &lt; 8 &amp; x1 &gt; 12)</code></pre>
 <pre><code>## # A tibble: 5 x 4
-##      x0    x1 s      s2     
-##   &lt;int&gt; &lt;int&gt; &lt;fct&gt;  &lt;fct&gt;  
-## 1     3    13 marika chitoge
-## 2     4    14 marika chitoge
-## 3     5    15 marika kosaki 
-## 4     6    16 kosaki chitoge
-## 5     7    17 marika kosaki</code></pre>
+##      x0    x1 s       s2     
+##   &lt;int&gt; &lt;int&gt; &lt;fct&gt;   &lt;fct&gt;  
+## 1     3    13 kosaki  kosaki 
+## 2     4    14 chitoge kosaki 
+## 3     5    15 marika  kosaki 
+## 4     6    16 kosaki  &lt;NA&gt;   
+## 5     7    17 chitoge chitoge</code></pre>
 <pre class="r"><code># 「AまたはB」(OR)
 filter(df, x0 &gt; 8 | x1 &lt; 15)</code></pre>
 <pre><code>## # A tibble: 6 x 4
 ##      x0    x1 s       s2     
 ##   &lt;int&gt; &lt;int&gt; &lt;fct&gt;   &lt;fct&gt;  
-## 1     1    11 chitoge &lt;NA&gt;   
-## 2     2    12 marika  &lt;NA&gt;   
-## 3     3    13 marika  chitoge
-## 4     4    14 marika  chitoge
-## 5     9    19 chitoge chitoge
-## 6    10    20 chitoge kosaki</code></pre>
+## 1     1    11 marika  &lt;NA&gt;   
+## 2     2    12 kosaki  chitoge
+## 3     3    13 kosaki  kosaki 
+## 4     4    14 chitoge kosaki 
+## 5     9    19 kosaki  chitoge
+## 6    10    20 marika  kosaki</code></pre>
 <pre class="r"><code># 「AかつB」の余事象
 filter(df, xor(x0 &lt; 8, x1 &gt; 12))</code></pre>
 <pre><code>## # A tibble: 5 x 4
-##      x0    x1 s       s2     
-##   &lt;int&gt; &lt;int&gt; &lt;fct&gt;   &lt;fct&gt;  
-## 1     1    11 chitoge &lt;NA&gt;   
-## 2     2    12 marika  &lt;NA&gt;   
-## 3     8    18 chitoge chitoge
-## 4     9    19 chitoge chitoge
-## 5    10    20 chitoge kosaki</code></pre>
+##      x0    x1 s      s2     
+##   &lt;int&gt; &lt;int&gt; &lt;fct&gt;  &lt;fct&gt;  
+## 1     1    11 marika &lt;NA&gt;   
+## 2     2    12 kosaki chitoge
+## 3     8    18 kosaki kosaki 
+## 4     9    19 kosaki chitoge
+## 5    10    20 marika kosaki</code></pre>
 <pre class="r"><code># 「AからB」
 filter(df, dplyr::between(x0, 3, 7))</code></pre>
 <pre><code>## # A tibble: 5 x 4
-##      x0    x1 s      s2     
-##   &lt;int&gt; &lt;int&gt; &lt;fct&gt;  &lt;fct&gt;  
-## 1     3    13 marika chitoge
-## 2     4    14 marika chitoge
-## 3     5    15 marika kosaki 
-## 4     6    16 kosaki chitoge
-## 5     7    17 marika kosaki</code></pre>
+##      x0    x1 s       s2     
+##   &lt;int&gt; &lt;int&gt; &lt;fct&gt;   &lt;fct&gt;  
+## 1     3    13 kosaki  kosaki 
+## 2     4    14 chitoge kosaki 
+## 3     5    15 marika  kosaki 
+## 4     6    16 kosaki  &lt;NA&gt;   
+## 5     7    17 chitoge chitoge</code></pre>
 <p>論理積(AND)は、上述のように<code>,</code>で繋いでいっても反応するのですが、明示的にしたほうがいいでしょう。<code>between</code>はdplyrに含まれる関数で、その名の通り区間を指定します。なお指定した範囲の値も含みます。</p>
 </div>
 <div id="文字列フィルタ" class="section level3">
@@ -690,60 +690,78 @@ filter(df, dplyr::between(x0, 3, 7))</code></pre>
 <p>まずは完全一致についてです:</p>
 <pre class="r"><code># 「*と一致する」
 filter(df, s == &quot;kosaki&quot;)</code></pre>
-<pre><code>## # A tibble: 1 x 4
+<pre><code>## # A tibble: 5 x 4
 ##      x0    x1 s      s2     
 ##   &lt;int&gt; &lt;int&gt; &lt;fct&gt;  &lt;fct&gt;  
-## 1     6    16 kosaki chitoge</code></pre>
+## 1     2    12 kosaki chitoge
+## 2     3    13 kosaki kosaki 
+## 3     6    16 kosaki &lt;NA&gt;   
+## 4     8    18 kosaki kosaki 
+## 5     9    19 kosaki chitoge</code></pre>
 <pre class="r"><code># 「*と一致しない」
 filter(df, s != &quot;chitoge&quot;)</code></pre>
-<pre><code>## # A tibble: 6 x 4
+<pre><code>## # A tibble: 8 x 4
 ##      x0    x1 s      s2     
 ##   &lt;int&gt; &lt;int&gt; &lt;fct&gt;  &lt;fct&gt;  
-## 1     2    12 marika &lt;NA&gt;   
-## 2     3    13 marika chitoge
-## 3     4    14 marika chitoge
+## 1     1    11 marika &lt;NA&gt;   
+## 2     2    12 kosaki chitoge
+## 3     3    13 kosaki kosaki 
 ## 4     5    15 marika kosaki 
-## 5     6    16 kosaki chitoge
-## 6     7    17 marika kosaki</code></pre>
+## 5     6    16 kosaki &lt;NA&gt;   
+## 6     8    18 kosaki kosaki 
+## 7     9    19 kosaki chitoge
+## 8    10    20 marika kosaki</code></pre>
 <p>このあたりは数値フィルタと同一です。</p>
 <p>次に、「複数の要素のどれかと一致する」ものを抽出する場合です:</p>
 <pre class="r"><code>filter(df, s %in% c(&quot;kosaki&quot;, &quot;chitoge&quot;))</code></pre>
-<pre><code>## # A tibble: 5 x 4
+<pre><code>## # A tibble: 7 x 4
 ##      x0    x1 s       s2     
 ##   &lt;int&gt; &lt;int&gt; &lt;fct&gt;   &lt;fct&gt;  
-## 1     1    11 chitoge &lt;NA&gt;   
-## 2     6    16 kosaki  chitoge
-## 3     8    18 chitoge chitoge
-## 4     9    19 chitoge chitoge
-## 5    10    20 chitoge kosaki</code></pre>
+## 1     2    12 kosaki  chitoge
+## 2     3    13 kosaki  kosaki 
+## 3     4    14 chitoge kosaki 
+## 4     6    16 kosaki  &lt;NA&gt;   
+## 5     7    17 chitoge chitoge
+## 6     8    18 kosaki  kosaki 
+## 7     9    19 kosaki  chitoge</code></pre>
 <p>この<code>%in%</code>はbaseにある演算子で、上記のように「Bの要素のどれか1つにマッチしたらTRUE、どれにもマッチしなければFALSE」を返してくれます。Rを使うなら絶対に覚えたほうがいいでしょう。</p>
 <p>なお、この余事象である「複数の要素のどれとも一致しない」ものを抽出する場合です:</p>
 <pre class="r"><code>filter(df, !s %in% c(&quot;marika&quot;, &quot;chitoge&quot;))</code></pre>
-<pre><code>## # A tibble: 1 x 4
+<pre><code>## # A tibble: 5 x 4
 ##      x0    x1 s      s2     
 ##   &lt;int&gt; &lt;int&gt; &lt;fct&gt;  &lt;fct&gt;  
-## 1     6    16 kosaki chitoge</code></pre>
+## 1     2    12 kosaki chitoge
+## 2     3    13 kosaki kosaki 
+## 3     6    16 kosaki &lt;NA&gt;   
+## 4     8    18 kosaki kosaki 
+## 5     9    19 kosaki chitoge</code></pre>
 <p>非常に残念ながら<code>%nin%</code>みたいな演算子はbaseには入っていません。そのためそのような演算子を自分で定義するか、それを含むパッケージを読み込む、あるいは上記のコードのように頭に<code>!</code>をつけて逆にするあたりが妥当なところでしょう。</p>
 <p>次に部分一致についてです。Rのbaseにはgrep系の関数もあるのですが、ここではtidyverseパッケージ群のひとつであるstringrパッケージから、<code>str_detect</code>関数を使います:</p>
 <pre class="r"><code>library(stringr)
 
 # &quot;k&quot;を含む文字列で抽出
 filter(df, str_detect(s, &quot;k&quot;))</code></pre>
-<pre><code>## # A tibble: 6 x 4
+<pre><code>## # A tibble: 8 x 4
 ##      x0    x1 s      s2     
 ##   &lt;int&gt; &lt;int&gt; &lt;fct&gt;  &lt;fct&gt;  
-## 1     2    12 marika &lt;NA&gt;   
-## 2     3    13 marika chitoge
-## 3     4    14 marika chitoge
+## 1     1    11 marika &lt;NA&gt;   
+## 2     2    12 kosaki chitoge
+## 3     3    13 kosaki kosaki 
 ## 4     5    15 marika kosaki 
-## 5     6    16 kosaki chitoge
-## 6     7    17 marika kosaki</code></pre>
+## 5     6    16 kosaki &lt;NA&gt;   
+## 6     8    18 kosaki kosaki 
+## 7     9    19 kosaki chitoge
+## 8    10    20 marika kosaki</code></pre>
 <pre class="r"><code># 先頭に&quot;k&quot;を含む文字列で抽出(正規表現によるパターン記述)
 filter(df, str_detect(s, &quot;^k&quot;))</code></pre>
-<pre><code>## # A tibble: 1 x 4
+<pre><code>## # A tibble: 5 x 4
 ##      x0    x1 s      s2     
 ##   &lt;int&gt; &lt;int&gt; &lt;fct&gt;  &lt;fct&gt;  
-## 1     6    16 kosaki chitoge</code></pre>
+## 1     2    12 kosaki chitoge
+## 2     3    13 kosaki kosaki 
+## 3     6    16 kosaki &lt;NA&gt;   
+## 4     8    18 kosaki kosaki 
+## 5     9    19 kosaki chitoge</code></pre>
 <p><code>stringr::str_detect(string, pattern)</code>はstringで指定した文字列ベクトルから正規表現でpatternと一致するものをTRUE,それ以外をFALSEで返してきます。<code>grepl</code>を使うよりも簡単でかつ高速に処理する(はず)なのでこちらをおすすめします。</p>
 </div>
 <div id="na処理" class="section level3">
@@ -752,23 +770,23 @@ filter(df, str_detect(s, &quot;^k&quot;))</code></pre>
 <pre class="r"><code># s2にNAが含まれているレコードを抽出
 filter(df, is.na(s2))</code></pre>
 <pre><code>## # A tibble: 2 x 4
-##      x0    x1 s       s2   
-##   &lt;int&gt; &lt;int&gt; &lt;fct&gt;   &lt;fct&gt;
-## 1     1    11 chitoge &lt;NA&gt; 
-## 2     2    12 marika  &lt;NA&gt;</code></pre>
+##      x0    x1 s      s2   
+##   &lt;int&gt; &lt;int&gt; &lt;fct&gt;  &lt;fct&gt;
+## 1     1    11 marika &lt;NA&gt; 
+## 2     6    16 kosaki &lt;NA&gt;</code></pre>
 <pre class="r"><code># s2にNAが含まれていないレコードを抽出
 filter(df, !is.na(s2))</code></pre>
 <pre><code>## # A tibble: 8 x 4
 ##      x0    x1 s       s2     
 ##   &lt;int&gt; &lt;int&gt; &lt;fct&gt;   &lt;fct&gt;  
-## 1     3    13 marika  chitoge
-## 2     4    14 marika  chitoge
-## 3     5    15 marika  kosaki 
-## 4     6    16 kosaki  chitoge
-## 5     7    17 marika  kosaki 
-## 6     8    18 chitoge chitoge
-## 7     9    19 chitoge chitoge
-## 8    10    20 chitoge kosaki</code></pre>
+## 1     2    12 kosaki  chitoge
+## 2     3    13 kosaki  kosaki 
+## 3     4    14 chitoge kosaki 
+## 4     5    15 marika  kosaki 
+## 5     7    17 chitoge chitoge
+## 6     8    18 kosaki  kosaki 
+## 7     9    19 kosaki  chitoge
+## 8    10    20 marika  kosaki</code></pre>
 <p><code>is.na</code>は「NAか否か」を判定してTRUEあるいはFALSEを返してきます。なのでこの場合s2にNAがあるレコードを抽出してきます。そのため,<code>!is.na(s2)</code>と否定することでs2がNAではないレコードを抽出してくるようになります。</p>
 </div>
 </div>
@@ -793,10 +811,10 @@ full_join(a, b, by = &quot;x1&quot;)</code></pre>
 <pre><code>## # A tibble: 4 x 3
 ##   x1       x2 x3   
 ##   &lt;chr&gt; &lt;int&gt; &lt;lgl&gt;
-## 1 A         1 TRUE 
-## 2 B         2 FALSE
+## 1 A         1 T    
+## 2 B         2 F    
 ## 3 C         3 NA   
-## 4 D        NA TRUE</code></pre>
+## 4 D        NA T</code></pre>
 <p>全ての行と列を結合します。該当するものがない場合、NAがはいります。また、byでキー変数を指定しますが、変数名は文字列(ダブルクォーテーションで挟む)にしてください。</p>
 </div>
 <div id="inner_join" class="section level3">
@@ -807,8 +825,8 @@ full_join(a, b, by = &quot;x1&quot;)</code></pre>
 <pre><code>## # A tibble: 2 x 3
 ##   x1       x2 x3   
 ##   &lt;chr&gt; &lt;int&gt; &lt;lgl&gt;
-## 1 A         1 TRUE 
-## 2 B         2 FALSE</code></pre>
+## 1 A         1 T    
+## 2 B         2 F</code></pre>
 <p>両方のデータセットで、共通して存在するもののみを結合します。</p>
 </div>
 <div id="left_join" class="section level3">
@@ -819,8 +837,8 @@ full_join(a, b, by = &quot;x1&quot;)</code></pre>
 <pre><code>## # A tibble: 3 x 3
 ##   x1       x2 x3   
 ##   &lt;chr&gt; &lt;int&gt; &lt;lgl&gt;
-## 1 A         1 TRUE 
-## 2 B         2 FALSE
+## 1 A         1 T    
+## 2 B         2 F    
 ## 3 C         3 NA</code></pre>
 <p>左側(第一引数)を優先して結合します。なお右側優先で結合する関数(right_join)もありますが省略します。</p>
 </div>
@@ -930,12 +948,12 @@ df</code></pre>
 <pre><code>## # A tibble: 7 x 3
 ##      no    x1 s1   
 ##   &lt;int&gt; &lt;int&gt; &lt;fct&gt;
-## 1     1     6 A    
-## 2     2     4 B    
-## 3     3     3 C    
-## 4     4     5 D    
-## 5     5     2 &lt;NA&gt; 
-## 6     6     1 F    
+## 1     1     4 A    
+## 2     2     2 B    
+## 3     3     1 C    
+## 4     4     3 D    
+## 5     5     5 &lt;NA&gt; 
+## 6     6     6 F    
 ## 7     7    NA G</code></pre>
 <div id="オフセット関数" class="section level3">
 <h3>オフセット関数</h3>
@@ -945,73 +963,73 @@ mutate(df, x2 = lag(x1))</code></pre>
 <pre><code>## # A tibble: 7 x 4
 ##      no    x1 s1       x2
 ##   &lt;int&gt; &lt;int&gt; &lt;fct&gt; &lt;int&gt;
-## 1     1     6 A        NA
-## 2     2     4 B         6
-## 3     3     3 C         4
-## 4     4     5 D         3
-## 5     5     2 &lt;NA&gt;      5
-## 6     6     1 F         2
-## 7     7    NA G         1</code></pre>
+## 1     1     4 A        NA
+## 2     2     2 B         4
+## 3     3     1 C         2
+## 4     4     3 D         1
+## 5     5     5 &lt;NA&gt;      3
+## 6     6     6 F         5
+## 7     7    NA G         6</code></pre>
 <pre class="r"><code># 3個ずらした変数を作成
 mutate(df, x2 = lag(x1, 3))</code></pre>
 <pre><code>## # A tibble: 7 x 4
 ##      no    x1 s1       x2
 ##   &lt;int&gt; &lt;int&gt; &lt;fct&gt; &lt;int&gt;
-## 1     1     6 A        NA
-## 2     2     4 B        NA
-## 3     3     3 C        NA
-## 4     4     5 D         6
-## 5     5     2 &lt;NA&gt;      4
-## 6     6     1 F         3
-## 7     7    NA G         5</code></pre>
+## 1     1     4 A        NA
+## 2     2     2 B        NA
+## 3     3     1 C        NA
+## 4     4     3 D         4
+## 5     5     5 &lt;NA&gt;      2
+## 6     6     6 F         1
+## 7     7    NA G         3</code></pre>
 <pre class="r"><code># ずらした空欄に値を指定
 mutate(df, x2 = lag(x1, 2, default = 0))</code></pre>
 <pre><code>## # A tibble: 7 x 4
 ##      no    x1 s1       x2
 ##   &lt;int&gt; &lt;int&gt; &lt;fct&gt; &lt;int&gt;
-## 1     1     6 A         0
-## 2     2     4 B         0
-## 3     3     3 C         6
-## 4     4     5 D         4
-## 5     5     2 &lt;NA&gt;      3
-## 6     6     1 F         5
-## 7     7    NA G         2</code></pre>
+## 1     1     4 A         0
+## 2     2     2 B         0
+## 3     3     1 C         4
+## 4     4     3 D         2
+## 5     5     5 &lt;NA&gt;      1
+## 6     6     6 F         3
+## 7     7    NA G         5</code></pre>
 <p>また、逆に上へずらす関数もあります:</p>
 <pre class="r"><code># 1個ずらした変数を作成
 mutate(df, x2 = lead(x1))</code></pre>
 <pre><code>## # A tibble: 7 x 4
 ##      no    x1 s1       x2
 ##   &lt;int&gt; &lt;int&gt; &lt;fct&gt; &lt;int&gt;
-## 1     1     6 A         4
-## 2     2     4 B         3
-## 3     3     3 C         5
-## 4     4     5 D         2
-## 5     5     2 &lt;NA&gt;      1
-## 6     6     1 F        NA
+## 1     1     4 A         2
+## 2     2     2 B         1
+## 3     3     1 C         3
+## 4     4     3 D         5
+## 5     5     5 &lt;NA&gt;      6
+## 6     6     6 F        NA
 ## 7     7    NA G        NA</code></pre>
 <pre class="r"><code># 3個ずらした変数を作成
 mutate(df, x2 = lead(x1, 3))</code></pre>
 <pre><code>## # A tibble: 7 x 4
 ##      no    x1 s1       x2
 ##   &lt;int&gt; &lt;int&gt; &lt;fct&gt; &lt;int&gt;
-## 1     1     6 A         5
-## 2     2     4 B         2
-## 3     3     3 C         1
-## 4     4     5 D        NA
-## 5     5     2 &lt;NA&gt;     NA
-## 6     6     1 F        NA
+## 1     1     4 A         3
+## 2     2     2 B         5
+## 3     3     1 C         6
+## 4     4     3 D        NA
+## 5     5     5 &lt;NA&gt;     NA
+## 6     6     6 F        NA
 ## 7     7    NA G        NA</code></pre>
 <pre class="r"><code># ずらした空欄に値を指定
 mutate(df, x2 = lead(x1, 2, default = 0))</code></pre>
 <pre><code>## # A tibble: 7 x 4
 ##      no    x1 s1       x2
 ##   &lt;int&gt; &lt;int&gt; &lt;fct&gt; &lt;int&gt;
-## 1     1     6 A         3
-## 2     2     4 B         5
-## 3     3     3 C         2
-## 4     4     5 D         1
-## 5     5     2 &lt;NA&gt;     NA
-## 6     6     1 F         0
+## 1     1     4 A         1
+## 2     2     2 B         3
+## 3     3     1 C         5
+## 4     4     3 D         6
+## 5     5     5 &lt;NA&gt;     NA
+## 6     6     6 F         0
 ## 7     7    NA G         0</code></pre>
 </div>
 <div id="累積関数" class="section level3">
@@ -1022,12 +1040,12 @@ mutate(df, x2 = cumsum(x1))</code></pre>
 <pre><code>## # A tibble: 7 x 4
 ##      no    x1 s1       x2
 ##   &lt;int&gt; &lt;int&gt; &lt;fct&gt; &lt;int&gt;
-## 1     1     6 A         6
-## 2     2     4 B        10
-## 3     3     3 C        13
-## 4     4     5 D        18
-## 5     5     2 &lt;NA&gt;     20
-## 6     6     1 F        21
+## 1     1     4 A         4
+## 2     2     2 B         6
+## 3     3     1 C         7
+## 4     4     3 D        10
+## 5     5     5 &lt;NA&gt;     15
+## 6     6     6 F        21
 ## 7     7    NA G        NA</code></pre>
 <p>NAが入るとNAになるので注意してください。なお累積関数には他にもいろいろありますので、このページ最後の資料をぜひ参照してみてください。</p>
 </div>
@@ -1038,24 +1056,24 @@ mutate(df, x2 = cumsum(x1))</code></pre>
 <pre><code>## # A tibble: 7 x 4
 ##      no    x1 s1    x2   
 ##   &lt;int&gt; &lt;int&gt; &lt;fct&gt; &lt;lgl&gt;
-## 1     1     6 A     TRUE 
-## 2     2     4 B     TRUE 
-## 3     3     3 C     FALSE
-## 4     4     5 D     TRUE 
-## 5     5     2 &lt;NA&gt;  FALSE
-## 6     6     1 F     FALSE
+## 1     1     4 A     T    
+## 2     2     2 B     F    
+## 3     3     1 C     F    
+## 4     4     3 D     F    
+## 5     5     5 &lt;NA&gt;  T    
+## 6     6     6 F     T    
 ## 7     7    NA G     NA</code></pre>
 <p>baseにも<code>ifelse()</code>があるのですが、こちらのほうがより厳密で、trueの内容とfalseの内容の処理内容をチェックして、同じ型で同じclassかどうかをみるようです。また、引数に<code>missing</code>があり、欠損値への処理ができるようになっています:</p>
 <pre class="r"><code>mutate(df, x2 = if_else(x1 &gt; 4, &quot;high&quot;, &quot;low&quot;, &quot;&quot;))</code></pre>
 <pre><code>## # A tibble: 7 x 4
 ##      no    x1 s1    x2   
 ##   &lt;int&gt; &lt;int&gt; &lt;fct&gt; &lt;chr&gt;
-## 1     1     6 A     high 
-## 2     2     4 B     low  
-## 3     3     3 C     low  
-## 4     4     5 D     high 
-## 5     5     2 &lt;NA&gt;  low  
-## 6     6     1 F     low  
+## 1     1     4 A     low  
+## 2     2     2 B     low  
+## 3     3     1 C     low  
+## 4     4     3 D     low  
+## 5     5     5 &lt;NA&gt;  high 
+## 6     6     6 F     high 
 ## 7     7    NA G     &quot;&quot;</code></pre>
 </div>
 <div id="条件を指定してna" class="section level3">
@@ -1065,12 +1083,12 @@ mutate(df, x2 = cumsum(x1))</code></pre>
 <pre><code>## # A tibble: 7 x 4
 ##      no    x1 s1       x2
 ##   &lt;int&gt; &lt;int&gt; &lt;fct&gt; &lt;int&gt;
-## 1     1     6 A         6
-## 2     2     4 B        NA
-## 3     3     3 C         3
-## 4     4     5 D         5
-## 5     5     2 &lt;NA&gt;      2
-## 6     6     1 F         1
+## 1     1     4 A        NA
+## 2     2     2 B         2
+## 3     3     1 C         1
+## 4     4     3 D         3
+## 5     5     5 &lt;NA&gt;      5
+## 6     6     6 F         6
 ## 7     7    NA G        NA</code></pre>
 <p>NAにしたい値は単一の値、もしくはデータセットと同一の長さのベクトルを受け付けるので注意してください。</p>
 </div>
@@ -1085,13 +1103,13 @@ mutate(df, x2 = cumsum(x1))</code></pre>
 <pre><code>## # A tibble: 7 x 7
 ##      no    x1 s1    s2     s3        x2    x3
 ##   &lt;int&gt; &lt;int&gt; &lt;fct&gt; &lt;fct&gt;  &lt;fct&gt;  &lt;int&gt; &lt;int&gt;
-## 1     1     6 A     kosaki kosaki    66    66
-## 2     2     4 B     B      xxx        4     4
-## 3     3     3 C     C      xxx        3     3
-## 4     4     5 D     D      xxx       55    55
-## 5     5     2 &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;       2     2
-## 6     6     1 F     F      xxx        1     1
-## 7     7    NA G     G      xxx       NA    -1</code></pre>
+## 1     1     4 A     kosaki kosaki     4     4
+## 2     2     2 B     B      xxx        2     2
+## 3     3     1 C     C      xxx        1     1
+## 4     4     3 D     D      xxx        3     3
+## 5     5     5 &lt;NA&gt;  &lt;NA&gt;   &lt;NA&gt;      55    55
+## 6     6     6 F     F      xxx       66    66
+## 7     7    NA G     G      xxx       NA   - 1</code></pre>
 <p>出力結果を確認してもらえればわかるかと思います。なお、数値の場合<code>5</code>のようにバッククォートで挟む必要があり、書き換える値で<code>55L</code>としているのは、Rで数値の末尾にLをつけるとそれを数値として扱うようするためです。このようにrecodeは型に対して厳し目になっています。</p>
 </div>
 <div id="複数の条件で場合分け" class="section level3">
@@ -1120,15 +1138,15 @@ mutate(df, x2 = cumsum(x1))</code></pre>
          s1 == &quot;A&quot; ~ &quot;chitoge&quot;
        ))</code></pre>
 <pre><code>## # A tibble: 7 x 8
-##      no    x1 s1    x2       x3 s2     s3     s4   
-##   &lt;int&gt; &lt;int&gt; &lt;fct&gt; &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;
-## 1     1     6 A     Odd    -12. kosaki kosaki A    
-## 2     2     4 B     Even    -8. &lt;NA&gt;   B      B    
-## 3     3     3 C     Odd     -6. &lt;NA&gt;   C      C    
-## 4     4     5 D     Even     5. &lt;NA&gt;   D      D    
-## 5     5     2 &lt;NA&gt;  Odd      2. &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt; 
-## 6     6     1 F     Even    36. &lt;NA&gt;   F      F    
-## 7     7    NA G     Odd     49. &lt;NA&gt;   G      G</code></pre>
+##      no    x1 s1    x2        x3 s2     s3     s4   
+##   &lt;int&gt; &lt;int&gt; &lt;fct&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;
+## 1     1     4 A     Odd   - 8.00 kosaki kosaki A    
+## 2     2     2 B     Even  - 4.00 &lt;NA&gt;   B      B    
+## 3     3     1 C     Odd   - 2.00 &lt;NA&gt;   C      C    
+## 4     4     3 D     Even    3.00 &lt;NA&gt;   D      D    
+## 5     5     5 &lt;NA&gt;  Odd     5.00 &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt; 
+## 6     6     6 F     Even   36.0  &lt;NA&gt;   F      F    
+## 7     7    NA G     Odd    49.0  &lt;NA&gt;   G      G</code></pre>
 <p><code>case_when()</code>では複数の条件を指定していくことができ，引数に論理式と置き換える値を記述していきます。この際，<code>~</code>を利用したformulaを使用します。</p>
 <p>また，論理式で拾えなかった要素については全て<code>NA</code>が返ってきます。なお，「それ以外」を指し示すのは<code>TRUE</code>で，上記のように<code>~</code>の左辺に記述すればOKです。</p>
 <p>注意事項ですが，順番が重要で最初に書いてあるものが優先されます。s3とs4のコードと出力を比較してください。</p>
@@ -1262,6 +1280,14 @@ spread(df, key = hoge, value = fuga)</code></pre>
 </div>
 <div id="まとめと参考資料" class="section level1">
 <h1>まとめと参考資料</h1>
+<div id="参考文献" class="section level2">
+<h2>参考文献</h2>
+<ul>
+<li>Jared P. Lander (著)みんなのR -データ分析と統計解析の新しい教科書- マイナビ</li>
+<li>Kun Ren (著) Rプログラミング本格入門: 達人データサイエンティストへの道 共立出版</li>
+<li>石田 基広 (著) 改訂3版 R言語逆引きハンドブック シーアンドアール研究所</li>
+</ul>
+</div>
 </div>
 <div id="session-info" class="section level1">
 <h1>session info</h1>
@@ -1291,12 +1317,12 @@ spread(df, key = hoge, value = fuga)</code></pre>
 ## [1] tidyr_0.8.0   stringr_1.3.0 bindrcpp_0.2  dplyr_0.7.4  
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.16     knitr_1.20       bindr_0.1.1      magrittr_1.5    
-##  [5] tidyselect_0.2.4 R6_2.2.2         rlang_0.2.0      tools_3.4.3     
-##  [9] utf8_1.1.3       cli_1.0.0        htmltools_0.3.6  yaml_2.1.18     
+##  [1] Rcpp_0.12.15     knitr_1.19       bindr_0.1        magrittr_1.5    
+##  [5] tidyselect_0.2.3 R6_2.2.2         rlang_0.1.6      tools_3.4.3     
+##  [9] utf8_1.1.3       cli_1.0.0        htmltools_0.3.6  yaml_2.1.16     
 ## [13] rprojroot_1.3-2  digest_0.6.15    assertthat_0.2.0 tibble_1.4.2    
 ## [17] crayon_1.3.4     purrr_0.2.4      glue_1.2.0       evaluate_0.10.1 
-## [21] rmarkdown_1.9    stringi_1.1.7    compiler_3.4.3   pillar_1.2.1    
+## [21] rmarkdown_1.8    stringi_1.1.6    compiler_3.4.3   pillar_1.1.0    
 ## [25] backports_1.1.2  pkgconfig_2.0.1</code></pre>
 </div>
 

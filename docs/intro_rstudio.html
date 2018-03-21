@@ -383,39 +383,39 @@ div.tocify {
 <p><strong>コンソールの使い方</strong></p>
 <p>以下が「コマンド?」状態:</p>
 <pre><code>&gt;</code></pre>
-<p>試しに以下のコードをコンソールに入力してEnter</p>
+<p>試しに以下のコードをコンソールに入力してEnter(Return)キーを押しましょう。</p>
 <pre class="r"><code>1+1</code></pre>
-<p>ついでにこれもやってみよう</p>
+<p>ついでにこれもやってみましょう。</p>
 <pre class="r"><code>41^2*271^2</code></pre>
 </div>
 <div id="関数を使おう" class="section level3">
 <h3>関数を使おう</h3>
-<p>2の平方根を算出するには?</p>
+<p>2の平方根を算出するにはどうすればよいでしょうか?</p>
 <pre class="r"><code>sqrt(2)</code></pre>
 <pre><code>## [1] 1.414214</code></pre>
 <ul>
 <li>関数とは「inputに対して決まった命令を実行してoutput」</li>
-<li>上の場合、<code>2</code>という値を「その平方根を計算」して1.4142136を出す
+<li>上の場合、<code>2</code>という値を「その平方根を計算」して1.4142136を出します。
 <ul>
-<li>この2を<strong>引数(Arguments)</strong>といいます</li>
-<li>そして出てきた結果が<strong>出力(Value)</strong>です</li>
+<li>この2を<strong>引数(Arguments)</strong>といいます。</li>
+<li>そして出てきた結果が<strong>出力(Value)</strong>です。</li>
 </ul></li>
-<li>関数は、<strong>関数名(引数, 引数, 引数, …)</strong>という感じで書きます</li>
+<li>関数は、<strong>関数名(引数, 引数, 引数, …)</strong>という感じで書きます。</li>
 </ul>
 </div>
 <div id="オブジェクトを使おう" class="section level3">
 <h3>オブジェクトを使おう</h3>
-<p>Rは数値や文字などを<strong>オブジェクト</strong>という単位で管理</p>
+<p>Rは数値や文字などを<strong>オブジェクト</strong>という単位で管理します。</p>
 <pre class="r"><code># 今夜のbeerは500円です
 beer &lt;- 500
 # beerの値段をRに聞いてみる
 beer</code></pre>
 <pre><code>## [1] 500</code></pre>
 <ul>
-<li>この<code>beer</code>がオブジェクトです
+<li>この<code>beer</code>がオブジェクトです。
 <ul>
-<li>変数に感覚が近いです</li>
-<li>いろんなものを入れて管理できます</li>
+<li>変数に感覚が近いです。</li>
+<li>いろんなものを入れて管理できます。</li>
 </ul></li>
 </ul>
 </div>
@@ -455,7 +455,7 @@ price * 1.08</code></pre>
 </div>
 <div id="data.frameとは" class="section level3">
 <h3>data.frameとは</h3>
-<p>簡単に言えばスプレットシートみたいな形のデータ</p>
+<p>簡単に言えばスプレットシートみたいな形のデータのことです。</p>
 <pre class="r"><code>head(iris, 4)</code></pre>
 <pre><code>## # A tibble: 4 x 5
 ##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
@@ -465,9 +465,9 @@ price * 1.08</code></pre>
 ## 3         4.70        3.20         1.30       0.200 setosa 
 ## 4         4.60        3.10         1.50       0.200 setosa</code></pre>
 <ul>
-<li>列が変数、行が1サンプル</li>
-<li>列の長さは全て同じ(矩形)</li>
-<li>扱い方は別途説明</li>
+<li>列が変数、行が1サンプルです。</li>
+<li>列の長さは全て同じ(矩形)です。</li>
+<li>扱い方は別途説明します。</li>
 </ul>
 </div>
 </div>
@@ -476,10 +476,10 @@ price * 1.08</code></pre>
 <div id="パッケージって何" class="section level3">
 <h3>パッケージって何?</h3>
 <ul>
-<li>すごくざっくり言うと関数とかデータセットとかをまとめたもの
+<li>すごくざっくり言うと関数とかデータセットとかをまとめたものです。
 <ul>
-<li>ツールセットみたいなイメージ</li>
-<li>Rでできることを広げてくれます</li>
+<li>ツールセットみたいなイメージを描いてください。</li>
+<li>Rでできることを広げてくれます！</li>
 </ul></li>
 <li>現在CRANに登録されているパッケージ数はこれで調べられます:</li>
 </ul>
@@ -487,15 +487,15 @@ price * 1.08</code></pre>
 </div>
 <div id="パッケージのインストール" class="section level3">
 <h3>パッケージのインストール</h3>
-<p>例として<code>ggplot2</code>を使ってみます</p>
+<p>例として<code>ggplot2</code>を使ってみましょう。</p>
 <pre class="r"><code>install.packages(&quot;ggplot2&quot;)</code></pre>
 <ul>
-<li>これでインストールできます</li>
-<li>たまにエラーを返すことがあります
+<li>これでインストールできます。</li>
+<li>たまにエラーを返すことがあります。
 <ul>
-<li>多くはパッケージの依存関係が原因です</li>
+<li>多くはパッケージの依存関係が原因です。</li>
 <li>OSによって違ったり、そのマシンの環境によっても違ったり…</li>
-<li>難しかったら身近な詳しい人や「Rなんでも相談室」で聞きましょう</li>
+<li>難しかったら身近な詳しい人や「Rなんでも相談室」で聞きましょう。</li>
 </ul></li>
 </ul>
 </div>
@@ -513,13 +513,13 @@ price * 1.08</code></pre>
 <pre class="r"><code>iris.data &lt;- read.csv(&quot;iris-data.csv&quot;)</code></pre>
 <p>これを実行すると、<code>iris.data</code>というオブジェクトにcsvファイルの中身が読み込まれます。この場合、以下のような状態となります:</p>
 <ul>
-<li>1行目が変数名として読み込まれる</li>
-<li><code>NA</code>という文字を欠損値となる</li>
-<li>空欄が欠損値となる</li>
-<li>(欠損扱いではない)数値ではない値は文字列として認識
+<li>1行目が変数名として読み込まれます。</li>
+<li><code>NA</code>という文字を欠損値となります。</li>
+<li>空欄が欠損値となります。</li>
+<li>(欠損扱いではない)数値ではない値は文字列として認識されます。
 <ul>
-<li>文字列が含まれる列は(他に数値があっても)全て文字列と判定</li>
-<li>デフォルトの設定では、<strong>Factor型として処理</strong>される</li>
+<li>文字列が含まれる列は(他に数値があっても)全て文字列と判定されます。</li>
+<li>デフォルトの設定では、<strong>Factor型として処理</strong>されます。</li>
 </ul></li>
 </ul>
 <p>主なデフォルト設定も含めて丁寧に書くと以下のようになります:</p>
@@ -528,17 +528,17 @@ price * 1.08</code></pre>
 <ul>
 <li>file: ファイル名(ファイルパス)。作業ディレクトリからの相対パスで指定します。</li>
 <li>header: 変数名を読み込むかどうか。<code>TRUE</code>なら1行目を変数名として読み込みます。</li>
-<li>na.strings: 欠損値として処理したい値を指定。
+<li>na.strings: 欠損値として処理したい値を指定します。
 <ul>
-<li>たとえば欠損値として<code>999</code>とか指定して入力していたならば、<code>na.strings = &quot;999&quot;</code></li>
-<li>複数ある場合は、<code>na.strings = c(&quot;999&quot;, &quot;-1&quot;)</code>という感じで指定</li>
+<li>たとえば欠損値として<code>999</code>とか指定して入力していたならば、<code>na.strings = &quot;999&quot;</code>とします。</li>
+<li>複数ある場合は、<code>na.strings = c(&quot;999&quot;, &quot;-1&quot;)</code>のように，<code>c()</code>で繋げて指定します。</li>
 </ul></li>
-<li>stringAsFactors: 文字列の変数をFactor型にするかどうか。
+<li>stringAsFactors: 文字列の変数をFactor型にするかどうかの指定をします。
 <ul>
-<li><code>TRUE</code>ならば文字列を含む変数は全てFactor型として処理</li>
-<li><code>FALSE</code>ならば文字列を含む変数は全てCharacter型として処理</li>
-<li>標準でRで設定してあるのは<code>TRUE</code></li>
-<li>個人的には<code>FALSE</code>にしておいて、必要に応じてその変数をFactor型に切り替えてます</li>
+<li><code>TRUE</code>ならば文字列を含む変数は全てFactor型として処理されます。</li>
+<li><code>FALSE</code>ならば文字列を含む変数は全てCharacter型として処理されます。</li>
+<li>標準でRで設定してあるのは<code>TRUE</code>です。</li>
+<li>個人的には<code>FALSE</code>にしておいて、必要に応じてその変数をFactor型に切り替えています。</li>
 </ul></li>
 </ul>
 </div>
@@ -557,11 +557,11 @@ price * 1.08</code></pre>
 </div>
 <p>ポイントになるところの説明です:</p>
 <ul>
-<li>Name: 読み込んだデータを格納するオブジェクト名</li>
-<li>Encoding: 文字コードを指定します。問題なければそのままで。</li>
-<li>Heading: 1行目を変数名として読み込むかどうか。</li>
-<li>NA Strings: NAにする文字列。上述の通り</li>
-<li>Strings as Factors: 文字列をFactor型にするかどううか。上述の通り。</li>
+<li>Name: 読み込んだデータを格納するオブジェクト名です。</li>
+<li>Encoding: 文字コードを指定します。問題なければそのままで構いません。</li>
+<li>Heading: 1行目を変数名として読み込むかどうかを指定します。</li>
+<li>NA Strings: NAにする文字列。上述の通りです。</li>
+<li>Strings as Factors: 文字列をFactor型にするかどううかを指定します。上述の通りです。</li>
 </ul>
 <p>つまり、コードでやるのをGUIでできる、というイメージです。慣れないうちはこちらのほうがスムーズかもしれません。慣れてきたら<code>read.csv()</code>などコードで読み込ませるのをおすすめします。</p>
 </div>
@@ -573,7 +573,7 @@ price * 1.08</code></pre>
 # install.packages(readr)
 library(readxl)
 xl_df_1 &lt;- read_excel(&quot;xl_data.xlsx&quot;, sheet = &quot;df_1&quot;)</code></pre>
-<p>第一引数が読み込むファイル名、第二引数が読み込むシートです。日本語のデータも対応しているので、特に問題なくいけます。.xlsと.xlsxの両方共に対応し、マシンにExcelがなくても読み込めます。</p>
+<p>第一引数が読み込むファイル名、第二引数が読み込むシートです。日本語のデータも対応しているので、特に問題は生じないでしょう。.xlsと.xlsxの両方共に対応し、マシンにExcelがなくても読み込めます。</p>
 </div>
 <div id="spssファイル.savからの読み込み" class="section level2">
 <h2>SPSSファイル(.sav)からの読み込み</h2>
@@ -587,13 +587,13 @@ sav_df &lt;- read_sav(&quot;hoge.sav&quot;)</code></pre>
 <div id="その他" class="section level2">
 <h2>その他</h2>
 <p>大量のデータを読み込む場合、<code>read.csv()</code>などでは処理に時間がかかることがあります。高速にデータを読み込むために{readr}などが開発されています。気になる方は調べてみてください。</p>
-<p>また、開発版(Preview版)のRStudioでは<strong>Import Dataset</strong>ボタンからcsv, Excel, SPSSなどを選択してデータをインポートできるようになっています(2016/07/16現在)。これらは上記で紹介したパッケージを組み込んだ機能で、GUIにてデータを読み込めるようになります。これは次回の通常版のアップデートで組み込まれるでしょう。</p>
+<p>また、RStudioでは<strong>Import Dataset</strong>ボタンからcsv, Excel, SPSS, SAS, Stataなどのファイルも読み込めるようになっています。これらは上記で紹介したパッケージを組み込んだ機能で、GUIの操作でデータを読み込めるようになります。</p>
 <p>このようにRStudioを利用すれば簡単にデータを読みこませることができますが、<strong>極力スクリプトにコードを記述して、データを読みこませる</strong>ようにしてください。この方が「どのデータを読み込んだのか」といったことが明確になり、ファイルを取り違えるといった分析者のミスが減少するからです。</p>
 </div>
 </div>
 <div id="rで軽く分析をしてみよう" class="section level1">
 <h1>Rで(軽く)分析をしてみよう</h1>
-<p>まず、Rを使うとどんな感じになるのか、試しに触ってみましょう。それぞれの解説については後述します。</p>
+<p>まず、Rを使うとどんな感じになるのか、試しに触ってみましょう。</p>
 <div id="データ構造を確認" class="section level2">
 <h2>データ構造を確認</h2>
 <p>Environmentのところにある<code>iris.data</code>をクリックすると、そのデータセットを見ることができます。</p>
@@ -601,7 +601,7 @@ sav_df &lt;- read_sav(&quot;hoge.sav&quot;)</code></pre>
 <img src="pics/data_view.png" />
 
 </div>
-<p>また、Consoleで以下のコードを入力してEnterで実行しましょう:</p>
+<p>また、Consoleで以下のコードを入力して実行しましょう:</p>
 <pre class="r"><code>str(iris.data)</code></pre>
 <pre><code>## &#39;data.frame&#39;:    150 obs. of  5 variables:
 ##  $ Sepal.Length: num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...
@@ -689,10 +689,18 @@ sav_df &lt;- read_sav(&quot;hoge.sav&quot;)</code></pre>
 </div>
 <div id="まとめと参考文献" class="section level1">
 <h1>まとめと参考文献</h1>
-<p>[WIP]</p>
+<div id="参考文献" class="section level2">
+<h2>参考文献</h2>
+<ul>
+<li>村井 潤一郎(著) はじめてのR: ごく初歩の操作から統計解析の導入まで 北大路書房</li>
+<li>山田剛史・杉澤 武俊・村井 潤一郎 (著) Rによるやさしい統計学 オーム社</li>
+<li>奥村 晴彦(著) Rで楽しむ統計 (Wonderful R 1) 共立出版</li>
+</ul>
+</div>
 </div>
 <div id="session-info" class="section level1">
 <h1>session info</h1>
+<p>このページを実行した環境は以下のとおりです:</p>
 <p>session-info:</p>
 <pre class="r"><code>sessionInfo()</code></pre>
 <pre><code>## R version 3.4.3 (2017-11-30)
@@ -718,12 +726,12 @@ sav_df &lt;- read_sav(&quot;hoge.sav&quot;)</code></pre>
 ## [1] tidyr_0.8.0   stringr_1.3.0 bindrcpp_0.2  dplyr_0.7.4  
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.16     knitr_1.20       bindr_0.1.1      magrittr_1.5    
-##  [5] tidyselect_0.2.4 R6_2.2.2         rlang_0.2.0      tools_3.4.3     
-##  [9] utf8_1.1.3       cli_1.0.0        htmltools_0.3.6  yaml_2.1.18     
+##  [1] Rcpp_0.12.15     knitr_1.19       bindr_0.1        magrittr_1.5    
+##  [5] tidyselect_0.2.3 R6_2.2.2         rlang_0.1.6      tools_3.4.3     
+##  [9] utf8_1.1.3       cli_1.0.0        htmltools_0.3.6  yaml_2.1.16     
 ## [13] rprojroot_1.3-2  digest_0.6.15    assertthat_0.2.0 tibble_1.4.2    
 ## [17] crayon_1.3.4     purrr_0.2.4      glue_1.2.0       evaluate_0.10.1 
-## [21] rmarkdown_1.9    stringi_1.1.7    compiler_3.4.3   pillar_1.2.1    
+## [21] rmarkdown_1.8    stringi_1.1.6    compiler_3.4.3   pillar_1.1.0    
 ## [25] backports_1.1.2  pkgconfig_2.0.1</code></pre>
 </div>
 

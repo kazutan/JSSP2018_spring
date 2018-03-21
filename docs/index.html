@@ -231,7 +231,7 @@ $(document).ready(function () {
 <li>Rの最新バージョンをインストールしておいてください。
 <ul>
 <li><a href="https://cran.r-project.org">The Comprehensive R Archive Network</a>より自分の環境(Window/Mac/Linux)にあったRインストーラをダウンロードし，実行します。</li>
-<li>Rの最新バージョンは3.4.3です。(2018/2/3現在)</li>
+<li>Rの最新バージョンは3.4.4です。(2018/3/20現在)</li>
 <li>Windowsマシンの場合
 <ul>
 <li>インストールの際は，R for Windowsのリンクより，baseを選択し,Download R 3.4.3 for Windowsを選択して下さい。</li>
@@ -243,7 +243,7 @@ $(document).ready(function () {
 <ul>
 <li><a href="https://www.rstudio.com">RStudioのサイト</a>より，Download RStudio Desktopを選択，インストーラを入手して実行してください。</li>
 <li>Free Editionで構いません。</li>
-<li>RStudioの最新バージョンは1.1.419です。(2018/2/3現在)</li>
+<li>RStudioの最新バージョンは1.1.442です。(2018/3/20現在)</li>
 </ul></li>
 </ul>
 </div>
@@ -286,8 +286,15 @@ $(document).ready(function () {
 <li>Publication-readyに仕上げる方法</li>
 </ul>
 </div>
-<div id="質疑応答" class="section level3">
-<h3>質疑応答</h3>
+<div id="質疑応答あるいはよくある質問と答え" class="section level3">
+<h3>質疑応答あるいはよくある質問と答え</h3>
+<ul>
+<li>インストールの際，Core Files,32bit,64bit,Message transration，どれにチェックして入ればいいですか？</li>
+<li>よくわからなければ「全て選択」かデフォルトのまま「次へ」を連打してください。</li>
+<li>Macなのですが，plotやggplot2で日本語文字が化けます</li>
+<li>plotであれば <code>par(family=&quot;HiraKakuProN-W3&quot;)</code> の1行を実行してください(日本語のフォントファミリを指定します)</li>
+<li>ggplot2であれば，<code>old = theme_set(theme_gray(base_family=&quot;HiraKakuProN-W3&quot;))</code> の1行を実行してください(日本語のフォントファミリをテーマとして指定します)</li>
+</ul>
 </div>
 </div>
 </div>
