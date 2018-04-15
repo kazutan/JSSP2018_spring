@@ -258,14 +258,14 @@ g <- g + stat_summary(fun.y = mean, geom = "point", size = 3)
 print(g)
 ```
 
-おや...ヴァイオリンプロットは狙い通りの描画ができましたが，平均値を示す点は縦一列に並べられてしまっています。それもそのはず，`geom_point()`のデフォルトの設定では，`position = "identity"`となっていたことを思い出してください。この設定を変える必要がありますね。
+おや...ヴァイオリンプロットは狙い通りの描画ができましたが，平均値を示す点は縦一列に並べられてしまっています。これは，`stat_summary()`のデフォルトの設定が，`position = "identity"`となっているためです。この設定を変える必要がありますね。
 
 なぜヴァイオリンプロットは水準が重ならず，水平方向に並べられているのでしょうか。`geom_violin`の中身を見てみましょう。
 ```{r 2way_2}
 geom_violin
 ```
 
-なるほど，ヴァイオリンプロットのデフォルトの設定では，`position = "dodge"`となっていました。これを参考に，散布図に関しても同様に設定を変えましょう。ただし少しだけ工夫が必要で，`position = "dodge"`の正式な書き方である`position = position_dodge()`を用い，さらに`width = 0.9`と引数を指定してください。
+なるほど，ヴァイオリンプロットのデフォルトの設定では，`position = "dodge"`となっていました。これを参考に，`stat_summary()`に関しても同様に設定を変えましょう。ただし少しだけ工夫が必要で，`position = "dodge"`の正式な書き方である`position = position_dodge()`を用い，さらに`width = 0.9`と引数を指定してください。
 ```{r 2way_3}
 g <- ggplot(data = mtcars, mapping = aes(x = factor(am), y = wt, fill = factor(vs), colour = factor(vs)))
 g <- g + geom_violin(alpha = 0.3)
