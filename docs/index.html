@@ -232,18 +232,18 @@ $(document).ready(function () {
 <ul>
 <li><a href="https://cran.r-project.org">The Comprehensive R Archive Network</a>より自分の環境(Window/Mac/Linux)にあったRインストーラをダウンロードし，実行します。</li>
 <li>Rの最新バージョンは3.4.4です。(2018/3/20現在)</li>
-<li>Windowsマシンの場合
-<ul>
-<li>インストールの際は，R for Windowsのリンクより，baseを選択し,Download R 3.4.3 for Windowsを選択して下さい。</li>
-<li>ユーザ名に2バイト文字が含まれていると不具合を起こすことがあります。その場合はお手数ですが，半角英数文字だけのアカウントを作成してください。</li>
-<li>インストールに際しては管理者権限を持っているアカウントで実行してください。</li>
-</ul></li>
+<li>Windowsマシンの場合 + インストールの際は，R for Windowsのリンクより，baseを選択し,Download R 3.4.3 for Windowsを選択して下さい。 + ユーザ名に2バイト文字が含まれていると不具合を起こすことがあります。その場合はお手数ですが，半角英数文字だけのアカウントを作成してください。 + インストールに際しては管理者権限を持っているアカウントで実行してください。</li>
 </ul></li>
 <li>RStudioの最新バージョンをインストールしておいてください。
 <ul>
 <li><a href="https://www.rstudio.com">RStudioのサイト</a>より，Download RStudio Desktopを選択，インストーラを入手して実行してください。</li>
 <li>Free Editionで構いません。</li>
 <li>RStudioの最新バージョンは1.1.442です。(2018/3/20現在)</li>
+</ul></li>
+<li>tidyverseパッケージをインストールしてください。
+<ul>
+<li><code>install.packages(&quot;tidyverse&quot;)</code>と打ち込んで実行してください。</li>
+<li>RStudioのパッケージ管理ボタンから進んでもいいでしょう。</li>
 </ul></li>
 </ul>
 </div>
@@ -253,15 +253,17 @@ $(document).ready(function () {
 <div id="part-i-rstudioの基本操作" class="section level3">
 <h3>Part I RStudioの基本操作</h3>
 <ul>
-<li>RStudioの基本操作</li>
-<li>画面説明</li>
-<li>Rスクリプトの実行と便利機能
+<li>RStudioの基本操作
 <ul>
+<li>画面説明</li>
+<li>Rスクリプトの実行と便利機能</li>
 <li>パッケージの読み込み</li>
 </ul></li>
-<li>外部ファイルの読み込み</li>
+<li>外部ファイルの読み込み
+<ul>
 <li>csvファイル</li>
 <li>Excel, SPSSのファイル</li>
+</ul></li>
 <li>データハンドリング；自分の好きな形にデータを変形させる
 <ul>
 <li>列選択</li>
@@ -278,22 +280,96 @@ $(document).ready(function () {
 <ul>
 <li>可視化の重要性</li>
 <li>ggplot2パッケージによる可視化の文法</li>
-<li>実習</li>
+<li>実習
+<ul>
 <li>要因計画法に即したデータの可視化</li>
 <li>一般線形モデルに即したデータの可視化</li>
 <li>一般化線形モデルに即したデータの可視化</li>
 <li>階層線形モデルに即したデータの可視化</li>
+</ul></li>
 <li>Publication-readyに仕上げる方法</li>
 </ul>
 </div>
 <div id="質疑応答あるいはよくある質問と答え" class="section level3">
 <h3>質疑応答あるいはよくある質問と答え</h3>
 <ul>
-<li>インストールの際，Core Files,32bit,64bit,Message transration，どれにチェックして入ればいいですか？</li>
+<li>インストールの際，Core Files,32bit,64bit,Message transration，どれにチェックして入ればいいですか？
+<ul>
 <li>よくわからなければ「全て選択」かデフォルトのまま「次へ」を連打してください。</li>
-<li>Macなのですが，plotやggplot2で日本語文字が化けます</li>
+</ul></li>
+<li>RとRStudioの違いは何ですか？
+<ul>
+<li>Rは統計の計算機としての機能だけを持っています(図の描画は含まれます)。もちろんそれだけで十分なのですが，ファイルの操作や図の操作，パッケージの管理などRを実際に使っているときに必要な機能を全てまとめた統合開発環境(IDE)がRStudioです。</li>
+</ul></li>
+<li>RStudioのプロジェクトとは何ですか？
+<ul>
+<li>RStudioではフォルダごとに「プロジェクト」を管理することができます。プロジェクトごとに，作業領域(ワーキングディレクトリ)，履歴などを保管できるので，複数のデータ処理タスクを分けて管理できます。</li>
+</ul></li>
+<li>分散分析をする際，確実な関数はなんでしょうか？今回はaovが紹介されていました。以前，anova関数を使っていたら正しくないと先輩に言われました。
+<ul>
+<li>aov関数はRの基本パッケージに入っているものですが，タイプ I平方和で計算します。セルごとにnのサイズが違う場合，一般にタイプ III平方和を使うことが多いですが，RでタイプIII平方和を使う場合はcarパッケージや<a href="http://riseki.php.xdomain.jp/index.php?ANOVA君">anovakun</a>などを導入する必要があります。</li>
+</ul></li>
+<li>dplyrの言葉の由来は何ですか？
+<ul>
+<li>もともとplyr(プライヤー)というパッケージが開発され、その後効率化・高速化をした後継パッケージとしてリリースされたのがdplyr(ディープライヤー)です。dは確かデータの略だった記憶があります。</li>
+</ul></li>
+<li>たくさんのcsvファイルが全てデスクトップ上にある時，結合するには一度全てのデータセットとして読み込まなくてはならないですか？（各実験参加者のx,yデータが個別のcsvファイル）
+<ul>
+<li>一つ一つ読み込んで結合させる方法もありますが、まとめて実行したいのであれば以下のようなコードでも実現できます</li>
+</ul></li>
+</ul>
+<pre class="r"><code># 作業ディレクトリ(フォルダ)の下に、「csvs」というディレクトリがあって、
+# その中にたくさんのcsvファイルがあるとします
+# また、各csvファイルの変数構成は同一であるとします
+
+# csvファイル名を取得
+csv_files &lt;- dir(&quot;csvs/&quot;)
+
+# csvファイル名をファイルパスへ
+csv_files &lt;- paste0(&quot;csvs/&quot;, csv_files)
+
+# ファイルパスに基づき、purrr::map_dfr関数でまとめてread.csvを実行
+# この関数はまとめて実行した結果をbind_rowでどんどんまとめていきます
+data &lt;- purrr::map_dfr(csv_files, read.csv, .id = &quot;no&quot;)</code></pre>
+<ul>
+<li>元のCSVとかの変数名って全部アルファベットじゃないといけないですよね。平仮名とか片仮名とか漢字とかの場合は全部いれなおしですよね。
+<ul>
+<li>できないわけではないですが、トラブルの原因となることがあります。dplyrパッケージには変数名を変更する関数(<code>rename</code>関数や<code>select</code>関数でちょっと工夫する)などがありますので、必要に応じて変更するといいでしょう。</li>
+</ul></li>
+<li>Rでは頻繁にバージョンが新しくなりますが，こまめにアップデートした方が良いでしょうか？古いバージョンを使い続けるのは良くないでしょうか？
+<ul>
+<li>分析者のスタンスによります。アップデートにはバグフィックスも含まれますので、私個人はこまめにアップデートを行いますが、アップデートせずにバージョンを固定していくのも分析結果の再生産性の観点から必要となることがあります。<br />
+大事なのは、その分析で実行しているRのバージョンやパッケージのバージョンをちゃんと意識することで、Rには<code>sessionInfo</code>という関数があります。分析レポートには、この出力結果を分析結果に付記するようにしましょう。</li>
+</ul></li>
+<li>ggplot2で色でもグレースケールでもなくハッチング（編みかけ）で表現したいのですが？
+<ul>
+<li>ggplot2単独では非常に厳しいです。他の表示方法を考えたほうがいいでしょう。</li>
+</ul></li>
+<li>パイプの使い方がよくわかりません
+<ul>
+<li>Rを使う上で必須ではないので、dplyrに慣れてきたら少しずつ使っていけばいいと思います。</li>
+</ul></li>
+<li>ggplot2で縦軸の上限・下限を変えたいのですが・・・
+<ul>
+<li>ggplot2では，特定の範囲の<strong>切り出し</strong>または<strong>拡大表示</strong>により，表示する範囲を調整することが出来ます。前者の<strong>切り出し</strong>では，例えば<code>+ ylim(0, 10)</code>と追記すれば，Y軸にマッピングした変数のうち，0から10の範囲に含まれるデータのみが描画に用いられます。このとき，範囲外のデータは捨てられることに注意してください。<code>stat_summary()</code>等で要約統計量を描画していたとしたら，切り出されたデータのみで再計算が行われることで，値が変わります。後者の<strong>拡大表示</strong>では，例えば<code>coord_cartesian(ylim = c(1, 7))</code>と追記すると，全データは保持したまま，1から7の範囲だけが表示されます。</li>
+</ul></li>
+<li>カラーパレットはどのようにして確認すれば良いですか？
+<ul>
+<li><code>RColorBrewer</code>パッケージをロードしたあとで，<code>display.brewer.all()</code>と入力してください。</li>
+</ul></li>
+<li>水準ごとに個別に色を変更することはできますか？
+<ul>
+<li>塗りつぶしの色を変える場合は，<code>scale_fill_manual(values = c(&quot;水準1&quot; = &quot;red&quot;, &quot;水準2&quot; = &quot;blue&quot;))</code>のように指定可能です。輪郭の色を変えるために<code>scale_colour_manual()</code>を使用する場合も同様です。</li>
+</ul></li>
+<li><code>theme_bw(base_size = 20)</code>などで全体のフォントサイズを変更できることは分かりましたが，X軸だけフォントサイズを変更するといったことは可能でしょうか？
+<ul>
+<li><code>theme()</code>で詳細に設定を変更することが出来ます。X軸のフォントサイズを変更したい場合は，<code>+ theme(axis.text.x = element_text(size=20))</code>と追記してください。</li>
+</ul></li>
+<li>Macなのですが，plotやggplot2で日本語文字が化けます
+<ul>
 <li>plotであれば <code>par(family=&quot;HiraKakuProN-W3&quot;)</code> の1行を実行してください(日本語のフォントファミリを指定します)</li>
 <li>ggplot2であれば，<code>old = theme_set(theme_gray(base_family=&quot;HiraKakuProN-W3&quot;))</code> の1行を実行してください(日本語のフォントファミリをテーマとして指定します)</li>
+</ul></li>
 </ul>
 </div>
 </div>

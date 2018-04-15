@@ -11,7 +11,7 @@
 
 <meta name="author" content="紀ノ定　保礼（静岡理工科大学）" />
 
-<meta name="date" content="2018-03-21" />
+<meta name="date" content="2018-04-15" />
 
 <title>データの可視化</title>
 
@@ -310,7 +310,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">データの可視化</h1>
 <h4 class="author"><em>紀ノ定　保礼（静岡理工科大学）</em></h4>
-<h4 class="date"><em>2018-03-21</em></h4>
+<h4 class="date"><em>2018-04-15</em></h4>
 
 </div>
 
@@ -577,7 +577,7 @@ g &lt;- g + stat_summary(fun.y = mean, geom = &quot;point&quot;, size = 3)
 
 print(g)</code></pre>
 <p><img src="visualization_files/figure-html/2way_1-1.png" width="672" /></p>
-<p>おや…ヴァイオリンプロットは狙い通りの描画ができましたが，平均値を示す点は縦一列に並べられてしまっています。それもそのはず，<code>geom_point()</code>のデフォルトの設定では，<code>position = &quot;identity&quot;</code>となっていたことを思い出してください。この設定を変える必要がありますね。</p>
+<p>おや…ヴァイオリンプロットは狙い通りの描画ができましたが，平均値を示す点は縦一列に並べられてしまっています。これは，<code>stat_summary()</code>のデフォルトの設定が，<code>position = &quot;identity&quot;</code>となっているためです。この設定を変える必要がありますね。</p>
 <p>なぜヴァイオリンプロットは水準が重ならず，水平方向に並べられているのでしょうか。<code>geom_violin</code>の中身を見てみましょう。</p>
 <pre class="r"><code>geom_violin</code></pre>
 <pre><code>function (mapping = NULL, data = NULL, stat = &quot;ydensity&quot;, position = &quot;dodge&quot;, 
@@ -590,7 +590,7 @@ print(g)</code></pre>
             na.rm = na.rm, ...))
 }
 &lt;environment: namespace:ggplot2&gt;</code></pre>
-<p>なるほど，ヴァイオリンプロットのデフォルトの設定では，<code>position = &quot;dodge&quot;</code>となっていました。これを参考に，散布図に関しても同様に設定を変えましょう。ただし少しだけ工夫が必要で，<code>position = &quot;dodge&quot;</code>の正式な書き方である<code>position = position_dodge()</code>を用い，さらに<code>width = 0.9</code>と引数を指定してください。</p>
+<p>なるほど，ヴァイオリンプロットのデフォルトの設定では，<code>position = &quot;dodge&quot;</code>となっていました。これを参考に，<code>stat_summary()</code>に関しても同様に設定を変えましょう。ただし少しだけ工夫が必要で，<code>position = &quot;dodge&quot;</code>の正式な書き方である<code>position = position_dodge()</code>を用い，さらに<code>width = 0.9</code>と引数を指定してください。</p>
 <pre class="r"><code>g &lt;- ggplot(data = mtcars, mapping = aes(x = factor(am), y = wt, fill = factor(vs), 
     colour = factor(vs)))
 g &lt;- g + geom_violin(alpha = 0.3)
